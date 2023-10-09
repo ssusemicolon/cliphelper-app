@@ -3,6 +3,7 @@ interface CollectionList {
 }
 
 interface CollectionListItem {
+  id: number;
   title: string;
   description: string;
   likeCount: number;

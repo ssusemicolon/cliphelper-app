@@ -1,4 +1,4 @@
-import { HStack, LinkIcon, Text } from '@gluestack-ui/themed';
+import { HStack, Heading, LinkIcon, Text } from '@gluestack-ui/themed';
 import { ReactNode } from 'react';
 import { LeftArrowIcon } from '../Icon/LeftArrowIcon';
 
@@ -10,7 +10,7 @@ type HeaderProps = {
 };
 
 const Header = (props: HeaderProps) => {
-  const { title = 'Clip Helper', back = false, left, right } = props;
+  const { title, back = false, left, right } = props;
   return (
     <HStack
       justifyContent="space-between"
@@ -20,18 +20,28 @@ const Header = (props: HeaderProps) => {
       <HStack alignItems="center" space={'md'}>
         {left}
         {back && <LeftArrowIcon size={'xl'} color="$primary900" />}
-        <HStack alignItems="center" space="xs">
+        {title ? (
           <Text
             fontSize={'$lg'}
-            paddingTop={15}
             fontWeight="700"
             color="$primary900"
             alignItems="center"
           >
             {title}
           </Text>
-          <LinkIcon color="$primary900" />
-        </HStack>
+        ) : (
+          <HStack alignItems="center" space="xs">
+            <Heading
+              fontSize={'$3xl'}
+              fontWeight="700"
+              color="$primary900"
+              alignItems="center"
+            >
+              {'Clip Helper'}
+            </Heading>
+            <LinkIcon color="$primary900" />
+          </HStack>
+        )}
       </HStack>
       <HStack>{right}</HStack>
     </HStack>

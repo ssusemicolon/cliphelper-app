@@ -1,5 +1,5 @@
 export const fonts = {
   heading: 'Dongle',
-  body: 'Dongle',
-  mono: 'Dongle',
+  body: 'Roboto',
+  mono: 'Roboto',
 };
