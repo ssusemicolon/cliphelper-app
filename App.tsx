@@ -7,8 +7,8 @@ import { Test } from '~/screens/Test';
 function App(): JSX.Element {
   return (
     <AppProvider>
-      {/* <Test /> */}
-      <ArticleListScreen />
+      <Test />
+      {/* <ArticleListScreen /> */}
     </AppProvider>
   );
 }

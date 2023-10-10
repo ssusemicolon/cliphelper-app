@@ -68,6 +68,18 @@
     {
       "path": "src/assets/fonts/Roboto/Roboto-ThinItalic.ttf",
       "sha1": "cc79d5a23bd0ec08b1d99f5390bf33cacc3082f4"
+    },
+    {
+      "path": "src/assets/lotties/dog.json",
+      "sha1": "4fb5352e308e1fe9aa5a39ad1398b0a85a169de9"
+    },
+    {
+      "path": "src/assets/lotties/grow_loading.json",
+      "sha1": "1a0d267dc23ff71f9ee4f1a89f2636aba33f3902"
+    },
+    {
+      "path": "src/assets/lotties/loading_spinner.json",
+      "sha1": "9f1e4b9c30183ae2fca6c8908ef3fbb902be35cd"
     }
   ]
 }
