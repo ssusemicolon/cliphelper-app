@@ -1,21 +1,12 @@
-import { HStack, Image, Text, VStack } from '@gluestack-ui/themed';
+import { HStack, Text, VStack } from '@gluestack-ui/themed';
 import { TouchableOpacity } from 'react-native';
 import { fromNow } from '~/utils/date-formatter';
+import ArticleThumb from '../Image/ArticleThumb';
 import Tags from '../Tags';
 
 interface ArticleItemProp {
   article: ArticleListItem;
 }
-
-const ThumbImage = ({ src }: { src: string }) => {
-  return (
-    <Image
-      source={{ uri: src }}
-      alt="blog thumbnail image"
-      minWidth={'$full'}
-    />
-  );
-};
 
 const ArticleItem = ({ article }: ArticleItemProp) => {
   const { thumb, title, tags, content, createdAt } = article;
@@ -33,7 +24,7 @@ const ArticleItem = ({ article }: ArticleItemProp) => {
             {fromNow(createdAt)}
           </Text>
         </HStack>
-        <HStack>{thumb && <ThumbImage src={thumb} />}</HStack>
+        <HStack>{thumb && <ArticleThumb src={thumb} />}</HStack>
         <HStack space="lg" paddingHorizontal={5}>
           <VStack space="xs">
             <Text fontWeight="700" fontSize={'$lg'}>

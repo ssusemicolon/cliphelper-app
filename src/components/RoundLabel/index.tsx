@@ -1,7 +1,11 @@
-import { Box, ButtonText } from '@gluestack-ui/themed';
+import { HStack, Text } from '@gluestack-ui/themed';
+import { ReactNode } from 'react';
+import { TouchableOpacity } from 'react-native';
 
 type RoundLabelProp = {
   children: string;
+  left?: ReactNode;
+  right?: ReactNode;
   bgColor?: string;
   fgColor?: string;
   borderColor?: string;
@@ -10,30 +14,34 @@ type RoundLabelProp = {
 
 const RoundLabel = ({
   children,
+  left,
+  right,
   onClick,
   bgColor = '$grey100',
   fgColor = '$primary900',
   borderColor,
 }: RoundLabelProp) => {
   return (
-    <Box
+    <HStack
       bgColor={bgColor}
       borderColor={borderColor || fgColor}
       borderWidth={1}
       borderRadius={10}
+      alignItems="center"
     >
-      <ButtonText
-        onPress={() => onClick?.()}
-        color={fgColor}
-        fontSize={'$xs'}
-        fontWeight="700"
-        padding={0}
-        paddingHorizontal={12}
-        margin={0}
-      >
-        {children}
-      </ButtonText>
-    </Box>
+      {left}
+      <TouchableOpacity onPress={() => onClick?.()} activeOpacity={0.5}>
+        <Text
+          color={fgColor}
+          size={'xs'}
+          fontWeight="700"
+          paddingHorizontal={12}
+        >
+          {children}
+        </Text>
+      </TouchableOpacity>
+      {right}
+    </HStack>
   );
 };
 

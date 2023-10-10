@@ -16,6 +16,7 @@ const Header = (props: HeaderProps) => {
       justifyContent="space-between"
       width={'$full'}
       paddingHorizontal={16}
+      height={'8%'}
     >
       <HStack alignItems="center" space={'md'}>
         {left}

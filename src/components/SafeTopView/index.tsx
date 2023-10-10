@@ -10,7 +10,6 @@ const SafeTopView = ({ children }: { children: ReactNode }) => {
       height={'$full'}
       borderWidth={1}
       borderColor="red"
-      justifyContent="space-between"
       paddingTop={top}
       paddingBottom={bottom}
     >

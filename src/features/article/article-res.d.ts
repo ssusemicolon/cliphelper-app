@@ -14,8 +14,7 @@ interface ArticleListItem {
 
 interface ArticleDetail extends ArticleListItem {
   url: string;
-  content: string;
-  questions: string;
+  questions?: string;
 }
 
 interface TagItem {
