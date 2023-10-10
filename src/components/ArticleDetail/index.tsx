@@ -1,15 +1,23 @@
-import { HStack, ScrollView, Text, VStack } from '@gluestack-ui/themed';
+import {
+  ButtonIcon,
+  HStack,
+  ScrollView,
+  Text,
+  VStack,
+} from '@gluestack-ui/themed';
 import { useState } from 'react';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { fromNow } from '~/utils/date-formatter';
+import CTAButton from '../CTAButton';
+import { SaveIcon } from '../Icon/SaveIcon';
 import ArticleThumb from '../Image/ArticleThumb';
 import Tags from '../Tags';
 import { ArticleTextArea } from './ArticleTextArea';
-import { CTAContainer } from './CTAContainer';
 
 interface ArticleDetailProp extends ArticleDetail {}
 
 const ArticleDetail = (prop: ArticleDetailProp) => {
-  const { thumb, title, tags, content, createdAt } = prop;
+  const { thumb, title, tags, content, createdAt, recentAccessTime } = prop;
   const [memoContent, setMemoContent] = useState<string>(content);
 
   return (
@@ -17,8 +25,8 @@ const ArticleDetail = (prop: ArticleDetailProp) => {
       <ScrollView>
         <VStack paddingVertical={5} gap={18}>
           <HStack justifyContent="flex-end">
-            <Text color="$grey500" size={'sm'}>
-              {fromNow(createdAt)}
+            <Text color="$grey500" size={'xs'}>
+              {fromNow(createdAt)} 만들어짐, {fromNow(recentAccessTime)}에 읽음
             </Text>
           </HStack>
 
@@ -31,13 +39,27 @@ const ArticleDetail = (prop: ArticleDetailProp) => {
               </Text>
             </VStack>
           </HStack>
+
           <Tags tags={tags} edit />
 
           <VStack>
-            <HStack>
+            <HStack justifyContent="space-between" paddingHorizontal={10}>
               <Text fontWeight="700" fontSize={'$lg'}>
                 메모
               </Text>
+              <TouchableOpacity>
+                <HStack
+                  alignItems="center"
+                  justifyContent="center"
+                  borderLeftColor="$primary900"
+                  gap={2}
+                >
+                  <Text color="$primary900" fontWeight="600" fontSize={'$sm'}>
+                    저장
+                  </Text>
+                  <ButtonIcon color="$primary900" size="md" as={SaveIcon} />
+                </HStack>
+              </TouchableOpacity>
             </HStack>
             <ArticleTextArea
               editable
@@ -51,7 +73,11 @@ const ArticleDetail = (prop: ArticleDetailProp) => {
           </VStack>
         </VStack>
       </ScrollView>
-      <CTAContainer />
+
+      <HStack justifyContent="center" gap={10}>
+        <CTAButton bgColor="$focus300">삭제하기</CTAButton>
+        <CTAButton>바로가기</CTAButton>
+      </HStack>
     </VStack>
   );
 };
