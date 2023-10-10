@@ -1,14 +1,14 @@
 import { ReactNode } from 'react';
 import BottomNavigator from '~/components/BottomNavigator';
-import Header from '~/components/Header';
 import SafeTopView from '~/components/SafeTopView';
 
-export const MainLayout = ({ children }: { children: ReactNode }) => {
+type MainLayoutProp = { children: ReactNode; bottom?: boolean };
+
+export const MainLayout = ({ children, bottom = false }: MainLayoutProp) => {
   return (
     <SafeTopView>
-      <Header />
       {children}
-      <BottomNavigator />
+      {bottom && <BottomNavigator />}
     </SafeTopView>
   );
 };

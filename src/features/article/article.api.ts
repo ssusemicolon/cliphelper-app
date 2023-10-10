@@ -1,8 +1,10 @@
 import { authAxios } from '../auth/auth.api';
+import demoArticleList from './article-list.json';
 
 export const fetchArticleList = async () => {
-  const { data } = await authAxios.get<ResponseType<ArticleList>>('/article');
-  return data.data;
+  // const { data } = await authAxios.get<ResponseType<ArticleList>>('/article');
+  // return data.data;
+  return demoArticleList.articles;
 };
 
 export const fetchArticleDetail = async (id: number) => {

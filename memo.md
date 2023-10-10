@@ -5,3 +5,10 @@ https://github.com/shopgpt/refilllink-app/blob/main/package.json
 https://www.npmjs.com/package/react-native-bootsplash
 https://github.com/lottie-react-native/lottie-react-native
 https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/
+
+npx react-native-asset
+npx react-native doctor
+
+pod deintegrate
+pod cache clean --all
+pod install

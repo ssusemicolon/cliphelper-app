@@ -1,0 +1,39 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "thumb": "https://velog.velcdn.com/images/siontama/post/ca82a734-4f77-44be-8f75-6bf1a85d7493/image.png",
+      "title": "typeORM 효율적으로 update 하기",
+      "content": "현재 진행하고 있는 프로젝트에서 typeORM을 사용중인데 특정 값을 변경하고 update를 할 때나 insert 할 때 모두 repository의 save()함수를 사용하고 있었다",
+      "createdAt": "2023-10-10T04:43:42.227Z",
+      "recentAccessTime": "2023-10-10T04:43:42.227Z",
+      "tags": [
+        { "id": 1, "title": "백엔드" },
+        { "id": 2, "title": "JPA" }
+      ]
+    },
+    {
+      "id": 2,
+      "thumb": "https://velog.velcdn.com/images/altjsvnf/post/80ed239a-3b4e-47b2-a588-916c778208e6/image.png",
+      "title": "[TS] TypeScript에서 Styled-component 사용하기",
+      "content": "TypeScript에서 styled-component를 사용해보자. createGlobalStyled으로 전역스타일 설정. props를 styled-component에 넘겨줄 때 타입을 지정해주지 않으면 오류가 난다.",
+      "createdAt": "2023-10-10T04:43:42.227Z",
+      "recentAccessTime": "2023-10-10T04:43:42.227Z",
+      "tags": [
+        { "id": 1, "title": "리액트" },
+        { "id": 2, "title": "프론트" }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Moment.js | Home",
+      "content": "시간처리를 편리하게 만들어주는 moment 라이브러리",
+      "createdAt": "2023-10-10T04:43:42.227Z",
+      "recentAccessTime": "2023-10-10T04:43:42.227Z",
+      "tags": [
+        { "id": 1, "title": "프론트" },
+        { "id": 2, "title": "JS" }
+      ]
+    }
+  ]
+}

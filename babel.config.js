@@ -9,5 +9,6 @@ module.exports = {
         rootPathSuffix: 'src',
       },
     ],
+    'babel-plugin-styled-components',
   ],
 };
