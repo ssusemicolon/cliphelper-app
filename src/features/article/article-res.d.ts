@@ -4,11 +4,12 @@ interface ArticleList {
 
 interface ArticleListItem {
   id: number;
-  thumb: string;
+  thumb?: string;
   title: string;
-  createdAt: Date;
-  recentAccessTime: Date;
-  tags: Tag[];
+  content: string;
+  createdAt: string;
+  recentAccessTime: string;
+  tags: TagItem[];
 }
 
 interface ArticleDetail extends ArticleListItem {
@@ -17,7 +18,7 @@ interface ArticleDetail extends ArticleListItem {
   questions: string;
 }
 
-interface Tag {
+interface TagItem {
   id: number;
   title: string;
 }

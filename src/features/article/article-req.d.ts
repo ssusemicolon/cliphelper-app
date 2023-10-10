@@ -1,9 +1,9 @@
 interface ArticleAppendForm {
   url: string;
   content: string;
-  tags: Tag[];
+  tags: TagAppendForm[];
 }
 
-interface Tag {
+interface TagAppendForm {
   title: string;
 }

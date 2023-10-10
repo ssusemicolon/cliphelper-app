@@ -15,7 +15,7 @@ const Header = (props: HeaderProps) => {
     <HStack
       justifyContent="space-between"
       width={'$full'}
-      paddingHorizontal={10}
+      paddingHorizontal={16}
     >
       <HStack alignItems="center" space={'md'}>
         {left}
@@ -43,7 +43,7 @@ const Header = (props: HeaderProps) => {
           </HStack>
         )}
       </HStack>
-      <HStack>{right}</HStack>
+      <HStack alignItems="center">{right}</HStack>
     </HStack>
   );
 };
