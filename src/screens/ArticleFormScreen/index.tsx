@@ -1,11 +1,11 @@
 import ArticleForm from '~/components/ArticleForm';
-import { MainLayout } from '~/components/Layout/MainLayout';
+import SafeView from '~/components/SafeView';
 
 const ArticleFormScreen = () => {
   return (
-    <MainLayout>
+    <SafeView bottom top>
       <ArticleForm />
-    </MainLayout>
+    </SafeView>
   );
 };
 

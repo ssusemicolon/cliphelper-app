@@ -1,19 +1,34 @@
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { FlatList } from 'react-native';
 import styled from 'styled-components';
+import { RootStackParamList } from '~/navigations/RootStackNavigator';
 import ArticleItem from '../ArticleItem';
 
 interface ArticleListProp extends ArticleList {}
 
 const ArticleFlatList = styled(FlatList as new () => FlatList<ArticleListItem>)`
   padding: 0 10px;
-  margin-bottom: 20px;
 `;
 
 const ArticleList = ({ articles }: ArticleListProp) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   return (
     <ArticleFlatList
       data={articles}
-      renderItem={({ item }) => <ArticleItem article={item} />}
+      renderItem={({ item }) => (
+        <ArticleItem
+          article={item}
+          onClick={() =>
+            navigation.navigate('Article', {
+              screen: 'Detail',
+              params: {
+                id: item.id,
+              },
+            })
+          }
+        />
+      )}
       keyExtractor={(item) => `${item.id}`}
     />
   );

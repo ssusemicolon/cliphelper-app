@@ -2,7 +2,7 @@ import { ButtonIcon, Text } from '@gluestack-ui/themed';
 import ArticleList from '~/components/ArticleList';
 import Header from '~/components/Header';
 import { SearchIcon } from '~/components/Icon/SearchIcon';
-import { MainLayout } from '~/components/Layout/MainLayout';
+import SafeView from '~/components/SafeView';
 import { useArticleList } from '~/features/article/article.hooks';
 
 export const ArticleListScreen = () => {
@@ -13,11 +13,11 @@ export const ArticleListScreen = () => {
   }
 
   return (
-    <MainLayout>
+    <SafeView>
       <Header
         right={<ButtonIcon size="xl" color="$primary900" as={SearchIcon} />}
       />
       <ArticleList articles={data} />
-    </MainLayout>
+    </SafeView>
   );
 };

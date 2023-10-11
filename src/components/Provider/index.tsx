@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PropsWithChildren } from 'react';
@@ -18,7 +19,9 @@ const AppProvider = ({ children }: PropsWithChildren) => {
         <ThemeProvider>
           <NavigationContainer>
             <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-              <GestureHandlerRootView>{children}</GestureHandlerRootView>
+              <GestureHandlerRootView style={{ flex: 1 }}>
+                {children}
+              </GestureHandlerRootView>
             </SafeAreaProvider>
           </NavigationContainer>
         </ThemeProvider>
