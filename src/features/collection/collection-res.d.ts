@@ -8,6 +8,7 @@ interface CollectionListItem {
   description: string;
   likeCount: number;
   user?: UserProfile;
+  isPublic: boolean;
 }
 
 interface CollectionDetail extends CollectionListItem {

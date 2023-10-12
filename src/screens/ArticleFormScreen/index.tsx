@@ -3,7 +3,7 @@ import SafeView from '~/components/SafeView';
 
 const ArticleFormScreen = () => {
   return (
-    <SafeView bottom top>
+    <SafeView bottom>
       <ArticleForm />
     </SafeView>
   );

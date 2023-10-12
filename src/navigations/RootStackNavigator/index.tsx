@@ -5,7 +5,6 @@ import {
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
 import React from 'react';
-import SafeView from '~/components/SafeView';
 import {
   ArticleStackNavigator,
   ArticleStackParamList,

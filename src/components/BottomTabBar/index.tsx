@@ -26,7 +26,11 @@ const Tab = ({ icon, active, onClick }: TabProps) => {
 const BottomTabBar = ({ state, navigation }: BottomTabBarProps) => {
   const { index } = state;
   return (
-    <HStack justifyContent="space-around" bgColor="$grey100">
+    <HStack
+      justifyContent="space-around"
+      bgColor="$grey100"
+      paddingVertical={'$1'}
+    >
       <Tab
         onClick={() => navigation.navigate('Home')}
         icon={HomeIcon}

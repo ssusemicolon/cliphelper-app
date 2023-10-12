@@ -17,6 +17,7 @@ import ArticleFormScreen from '~/screens/ArticleFormScreen';
 import { ArticleListScreen } from '~/screens/ArticleListScreen';
 import { RootStackParamList } from '../RootStackNavigator';
 import SafeView from '~/components/SafeView';
+import { CollectionListScreen } from '~/screens/CollectionListScreen';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -45,7 +46,7 @@ export const MainTabNavigator = () => {
     <SafeView top bottom>
       <Tab.Navigator
         id="Main"
-        initialRouteName="Home"
+        initialRouteName="Bookmark"
         tabBar={BottomTabBar}
         screenOptions={{
           headerShown: false,
@@ -57,7 +58,7 @@ export const MainTabNavigator = () => {
         <Tab.Screen name="Home" component={ArticleListScreen} />
         <Tab.Screen name="Search" component={ArticleListScreen} />
         <Tab.Screen name="Form" component={ArticleFormScreen} />
-        <Tab.Screen name="Bookmark" component={ArticleListScreen} />
+        <Tab.Screen name="Bookmark" component={CollectionListScreen} />
         <Tab.Screen name="Profile" component={ArticleListScreen} />
       </Tab.Navigator>
     </SafeView>
