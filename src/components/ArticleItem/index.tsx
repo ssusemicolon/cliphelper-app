@@ -6,12 +6,13 @@ import Tags from '../Tags';
 
 interface ArticleItemProp {
   article: ArticleListItem;
+  onClick?: () => void;
 }
 
-const ArticleItem = ({ article }: ArticleItemProp) => {
+const ArticleItem = ({ article, onClick }: ArticleItemProp) => {
   const { thumb, title, tags, content, createdAt } = article;
   return (
-    <TouchableOpacity activeOpacity={0.8}>
+    <TouchableOpacity activeOpacity={0.8} onPress={() => onClick?.()}>
       <VStack
         justifyContent="center"
         space="md"
