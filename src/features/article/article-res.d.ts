@@ -9,15 +9,10 @@ interface ArticleListItem {
   content: string;
   createdAt: string;
   recentAccessTime: string;
-  tags: TagItem[];
+  tags: string[];
 }
 
 interface ArticleDetail extends ArticleListItem {
   url: string;
   questions?: string;
-}
-
-interface TagItem {
-  id: number;
-  title: string;
 }

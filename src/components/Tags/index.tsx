@@ -1,12 +1,15 @@
-import { Box, ButtonIcon, HStack, Icon } from '@gluestack-ui/themed';
+import { Box, ButtonIcon, HStack, Icon, VStack } from '@gluestack-ui/themed';
+import { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { CrossIcon } from '../Icon/CrossIcon';
 import { RoundedPlusIcon } from '../Icon/PlusIcon';
 import RoundLabel from '../RoundLabel';
+import { TagInput } from './TagInput';
 
 interface TagProps {
-  tags: TagItem[];
+  tags: string[];
   edit?: boolean;
+  setTags?: (args: string[]) => void;
 }
 
 const CrossButton = ({ onClick }: { onClick?: () => void }) => {
@@ -34,17 +37,51 @@ const AppendTagButton = ({ onClick }: { onClick?: () => void }) => {
   );
 };
 
-const Tags = ({ tags, edit }: TagProps) => {
+const Tags = ({ tags, edit, setTags }: TagProps) => {
+  const [editTag, setEditTag] = useState<string>('');
+  const [step, setStep] = useState(0);
+
+  const onAppendTag = () => {
+    setTags?.([...tags, editTag]);
+    setEditTag('');
+  };
+
+  const onRemoveTag = (title: string) => {
+    setTags?.(tags.filter((t) => t !== title));
+  };
+
   return (
-    <HStack space="sm" flexWrap="wrap">
-      {tags.map(({ id, title }) => (
-        <RoundLabel
-          key={id}
-          right={edit && <CrossButton />}
-        >{`#${title}`}</RoundLabel>
-      ))}
-      {edit && <AppendTagButton />}
-    </HStack>
+    <VStack>
+      <HStack space="sm" flexWrap="wrap">
+        {tags.map((title) => (
+          <RoundLabel
+            key={title}
+            right={edit && <CrossButton onClick={() => onRemoveTag(title)} />}
+          >{`#${title}`}</RoundLabel>
+        ))}
+      </HStack>
+      {edit && step === 0 && (
+        <Box marginTop={10}>
+          <AppendTagButton onClick={() => setStep(1)} />
+        </Box>
+      )}
+      {edit && step === 1 && (
+        <HStack
+          width={150}
+          marginTop={10}
+          flex={1}
+          alignItems="center"
+          borderColor="$primary900"
+          borderRadius={8}
+          borderWidth={1}
+        >
+          <TagInput value={editTag} onChangeText={(t) => setEditTag(t)} />
+          <TouchableOpacity onPress={onAppendTag}>
+            <ButtonIcon as={RoundedPlusIcon} size="md" color="$primary900" />
+          </TouchableOpacity>
+        </HStack>
+      )}
+    </VStack>
   );
 };
 

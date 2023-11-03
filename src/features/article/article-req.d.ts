@@ -1,7 +1,9 @@
 interface ArticleAppendForm {
   url: string;
-  content: string;
-  tags: TagAppendForm[];
+  title: string;
+  description?: string;
+  memo: string;
+  tags: string[];
 }
 
 interface TagAppendForm {
