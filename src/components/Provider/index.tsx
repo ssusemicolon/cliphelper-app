@@ -9,6 +9,7 @@ import {
 } from 'react-native-safe-area-context';
 import { ThemeProvider } from '~/theme';
 import PersistProvider from '../../store/PersistProvider';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 const client = new QueryClient();
 
@@ -20,7 +21,7 @@ const AppProvider = ({ children }: PropsWithChildren) => {
           <NavigationContainer>
             <SafeAreaProvider initialMetrics={initialWindowMetrics}>
               <GestureHandlerRootView style={{ flex: 1 }}>
-                {children}
+                <BottomSheetModalProvider>{children}</BottomSheetModalProvider>
               </GestureHandlerRootView>
             </SafeAreaProvider>
           </NavigationContainer>

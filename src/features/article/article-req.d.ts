@@ -1,5 +1,5 @@
 interface ArticleAppendForm {
-  url: string;
+  url?: string;
   title: string;
   description?: string;
   memo: string;
