@@ -1,4 +1,4 @@
-import { HStack, VStack } from '@gluestack-ui/themed';
+import { VStack } from '@gluestack-ui/themed';
 import ArticleList from '../ArticleList';
 import CollectionItem from '../CollectionItem';
 

@@ -13,6 +13,27 @@ export const fetchArticleDetail = async (id: number) => {
   return data.data;
 };
 
+export const fetchArticleCollections = async (id: number) => {
+  const { data } = await authAxios.get<ResponseType<number[]>>(
+    `/articles/${id}/collections`,
+  );
+  return data.data;
+};
+
+export const modifyArticleCollection = async ({
+  id,
+  collections,
+}: {
+  id: number;
+  collections: number[];
+}) => {
+  const { data } = await authAxios.patch<ResponseType<{}>>(
+    `/articles/${id}/collections`,
+    collections,
+  );
+  return data.data;
+};
+
 export const appendArticle = async (form: ArticleAppendForm) => {
   const data = await authAxios.post('/articles', form, {
     headers: {

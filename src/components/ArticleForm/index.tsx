@@ -84,7 +84,7 @@ const ArticleForm = ({ onSuccess }: ArticleFormProps) => {
             <ArticleTextArea
               editable
               multiline
-              maxLength={100}
+              maxLength={200}
               value={url}
               onChangeText={onChangeUrl}
               placeholder="https://velog.io/@jeehye03/ios-pod-%EC%82%AD%EC%A0%9C-%ED%81%B4%EB%A6%B0-%EB%AA%85%EB%A0%B9%EC%96%B4"

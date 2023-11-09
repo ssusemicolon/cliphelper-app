@@ -6,7 +6,7 @@ import {
   removeCollection,
 } from './collection.api';
 
-const collectionKeys = {
+export const collectionKeys = {
   all: 'collection',
   list: () => [...collectionKeys.all, 'list'],
   detail: (id: number) => [...collectionKeys.all, 'detail', { id }],

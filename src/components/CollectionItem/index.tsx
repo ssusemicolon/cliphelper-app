@@ -1,10 +1,10 @@
 import { HStack, Text, VStack } from '@gluestack-ui/themed';
+import { memo } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { EarthIcon } from '../Icon/EarthIcon';
 import { HeartIcon } from '../Icon/HeartIcon';
 import { LockIcon } from '../Icon/LockIcon';
 import { UserProfile } from '../UserProfile';
-import { memo } from 'react';
 
 interface CollectionItemProp {
   collection: CollectionListItem;
@@ -17,6 +17,7 @@ const CollectionItem = ({ collection, onClick }: CollectionItemProp) => {
     title,
     description,
     user,
+
     public: isPublic,
   } = collection;
   const likeCount = 5;

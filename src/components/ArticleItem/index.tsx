@@ -7,12 +7,17 @@ import Tags from '../Tags';
 interface ArticleItemProp {
   article: ArticleListItem;
   onClick?: () => void;
+  onLongClick?: (id: number) => void;
 }
 
-const ArticleItem = ({ article, onClick }: ArticleItemProp) => {
-  const { thumbnail, title, tags, memo, createdAt } = article;
+const ArticleItem = ({ article, onClick, onLongClick }: ArticleItemProp) => {
+  const { articleId, thumbnail, title, tags, memo, createdAt } = article;
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => onClick?.()}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => onClick?.()}
+      onLongPress={() => onLongClick?.(articleId)}
+    >
       <VStack
         justifyContent="center"
         space="md"

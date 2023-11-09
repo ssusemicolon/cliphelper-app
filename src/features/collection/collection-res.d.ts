@@ -3,7 +3,7 @@ interface CollectionListItem {
   title: string;
   thumbnail?: string;
   description: string;
-  articles?: number[];
+  articles?: ArticleListItem[];
   articleCount: number;
   userId: number;
   user?: UserProfile;

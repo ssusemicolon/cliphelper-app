@@ -6,6 +6,7 @@ import ArticleItem from '../ArticleItem';
 
 type ArticleListProp = {
   articles: ArticleListItem[];
+  onLongClick?: (articleId: number) => void;
 };
 
 const ArticleFlatList = styled(FlatList as new () => FlatList<ArticleListItem>)`
@@ -13,7 +14,7 @@ const ArticleFlatList = styled(FlatList as new () => FlatList<ArticleListItem>)`
   flex: 1;
 `;
 
-const ArticleList = ({ articles }: ArticleListProp) => {
+const ArticleList = ({ articles, onLongClick }: ArticleListProp) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (
@@ -30,6 +31,7 @@ const ArticleList = ({ articles }: ArticleListProp) => {
               },
             })
           }
+          onLongClick={onLongClick}
         />
       )}
       keyExtractor={(item) => `${item.articleId}`}

@@ -1,16 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   appendArticle,
+  fetchArticleCollections,
   fetchArticleDetail,
   fetchArticleList,
   modifyArticle,
+  modifyArticleCollection,
   removeArticle,
 } from './article.api';
 
-const articleKeys = {
+export const articleKeys = {
   all: 'article',
   list: () => [...articleKeys.all, 'list'],
   detail: (id: number) => [...articleKeys.all, 'detail', { id }],
+  collection: (id: number) => [...articleKeys.all, 'collection', { id }],
 };
 
 /** fetch article list */
@@ -21,6 +24,22 @@ export const useArticleList = () => {
 /** fetch article detail */
 export const useArticleDetail = (id: number) => {
   return useQuery(articleKeys.detail(id), () => fetchArticleDetail(id));
+};
+
+/** fetch article collections */
+export const useArticleCollections = (id: number) => {
+  return useQuery(articleKeys.collection(id), () =>
+    fetchArticleCollections(id),
+  );
+};
+
+export const useArticleCollectionMutation = (id: number) => {
+  const queryClient = useQueryClient();
+  return useMutation(modifyArticleCollection, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(articleKeys.collection(id));
+    },
+  });
 };
 
 /** append article */
