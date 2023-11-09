@@ -16,12 +16,15 @@ import React from 'react';
 import Header from '~/components/Header';
 import { SearchIcon } from '~/components/Icon/SearchIcon';
 import SafeView from '~/components/SafeView';
-import { CollectionListScreen } from '~/screens/CollectionListScreen';
+import {
+  MyBookmarkListScreen,
+  MyCollectionListScreen,
+} from '~/screens/CollectionListScreen';
 import { RootStackParamList } from '../RootStackNavigator';
 
 export type CollectionTopTabParamList = {
   My: undefined;
-  Other: undefined;
+  Bookmark: undefined;
 };
 
 const Tab = createMaterialTopTabNavigator<CollectionTopTabParamList>();
@@ -46,9 +49,9 @@ export const CollectionTopTabNavigator = () => {
       <Header
         right={<ButtonIcon size="xl" color="$primary900" as={SearchIcon} />}
       />
-      <Tab.Navigator id="Bookmark">
-        <Tab.Screen name="My" component={CollectionListScreen} />
-        <Tab.Screen name="Other" component={CollectionListScreen} />
+      <Tab.Navigator id="BookmarkTab">
+        <Tab.Screen name="My" component={MyCollectionListScreen} />
+        <Tab.Screen name="Bookmark" component={MyBookmarkListScreen} />
       </Tab.Navigator>
     </SafeView>
   );

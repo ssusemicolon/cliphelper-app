@@ -35,7 +35,7 @@ export const RootStackNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={'Auth'}
+      initialRouteName={'Main'}
     >
       <Stack.Screen name="Auth" component={AuthStackNavigator} />
       <Stack.Screen name="Article" component={ArticleStackNavigator} />

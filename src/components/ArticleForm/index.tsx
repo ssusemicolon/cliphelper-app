@@ -1,14 +1,75 @@
 import { HStack, ScrollView, Text, VStack } from '@gluestack-ui/themed';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { parseSite } from '~/utils/parseSite';
+import useDebounce from '~/utils/useDebounce';
 import { ArticleTextArea } from '../ArticleDetail/ArticleTextArea';
 import CTAButton from '../CTAButton';
 import Tags from '../Tags';
+import { useArticleAppendMutation } from '~/features/article/article.hooks';
 
-const ArticleForm = () => {
+type ArticleFormProps = {
+  onSuccess?: () => void;
+};
+
+const ArticleForm = ({ onSuccess }: ArticleFormProps) => {
   const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
+  const description = useRef<string>('');
+  const thumbnail = useRef<string>('');
   const [memoContent, setMemoContent] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
+
+  const { mutate: saveArticle } = useArticleAppendMutation();
+
+  const handleSave = () => {
+    saveArticle(
+      {
+        url,
+        title,
+        memo: memoContent,
+        thumbnail: thumbnail?.current,
+        description: description?.current,
+        tags,
+        file: null,
+      },
+      {
+        onSuccess: () => {
+          initState();
+          onSuccess?.();
+        },
+      },
+    );
+  };
+
+  const initState = () => {
+    setUrl('');
+    setTitle('');
+    description.current = '';
+    thumbnail.current = '';
+    setMemoContent('');
+    setTags([]);
+  };
+
+  const onChangeUrl = (t: string) => {
+    setUrl(t);
+    getSiteInfo(t);
+  };
+
+  const getSiteInfo = useDebounce(async (t: string) => {
+    const result = await parseSite(t);
+    console.log('result: ', result);
+    if (result?.title) {
+      setTitle(result?.title);
+    }
+
+    if (result?.description) {
+      description.current = result?.description?.substring(0, 100);
+    }
+
+    if (result?.thumbnail) {
+      thumbnail.current = result?.thumbnail;
+    }
+  });
 
   return (
     <VStack justifyContent="space-between" paddingHorizontal={12} flex={1}>
@@ -23,9 +84,9 @@ const ArticleForm = () => {
             <ArticleTextArea
               editable
               multiline
-              maxLength={50}
+              maxLength={100}
               value={url}
-              onChangeText={(t) => setUrl(t)}
+              onChangeText={onChangeUrl}
               placeholder="https://velog.io/@jeehye03/ios-pod-%EC%82%AD%EC%A0%9C-%ED%81%B4%EB%A6%B0-%EB%AA%85%EB%A0%B9%EC%96%B4"
             />
           </VStack>
@@ -78,7 +139,7 @@ const ArticleForm = () => {
       </ScrollView>
 
       <HStack justifyContent="center" gap={10}>
-        <CTAButton>저장하기</CTAButton>
+        <CTAButton onClick={handleSave}>저장하기</CTAButton>
       </HStack>
     </VStack>
   );

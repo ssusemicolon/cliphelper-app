@@ -14,11 +14,25 @@ import ArticleThumb from '../Image/ArticleThumb';
 import Tags from '../Tags';
 import { ArticleTextArea } from './ArticleTextArea';
 
-interface ArticleDetailProp extends ArticleDetail {}
+interface ArticleDetailProp extends ArticleDetail {
+  onDelete?: () => void;
+  onLink?: () => void;
+}
 
 const ArticleDetail = (prop: ArticleDetailProp) => {
-  const { thumb, title, tags, content, createdAt, recentAccessTime } = prop;
-  const [memoContent, setMemoContent] = useState<string>(content);
+  const {
+    url,
+    title,
+    tags,
+    memo,
+    createdAt,
+    recentAccessTime,
+    thumbnail,
+    onDelete,
+    onLink,
+  } = prop;
+
+  const [memoContent, setMemoContent] = useState<string>(memo);
 
   return (
     <VStack justifyContent="space-between" paddingHorizontal={12} flex={1}>
@@ -30,7 +44,7 @@ const ArticleDetail = (prop: ArticleDetailProp) => {
             </Text>
           </HStack>
 
-          <HStack>{thumb && <ArticleThumb src={thumb} />}</HStack>
+          <HStack>{thumbnail && <ArticleThumb src={thumbnail} />}</HStack>
 
           <HStack space="lg" paddingHorizontal={5}>
             <VStack space="xs">
@@ -75,8 +89,10 @@ const ArticleDetail = (prop: ArticleDetailProp) => {
       </ScrollView>
 
       <HStack justifyContent="center" gap={10}>
-        <CTAButton bgColor="$focus300">삭제하기</CTAButton>
-        <CTAButton>바로가기</CTAButton>
+        <CTAButton onClick={onDelete} bgColor="$focus300">
+          삭제하기
+        </CTAButton>
+        {url && <CTAButton onClick={onLink}>바로가기</CTAButton>}
       </HStack>
     </VStack>
   );

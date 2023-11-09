@@ -1,9 +1,11 @@
 interface ArticleAppendForm {
   url?: string;
   title: string;
+  thumbnail?: string;
   description?: string;
   memo: string;
   tags: string[];
+  file: File;
 }
 
 interface TagAppendForm {

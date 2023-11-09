@@ -10,7 +10,8 @@ interface CollectionItemProp {
 }
 
 const CollectionItem = ({ collection, onClick }: CollectionItemProp) => {
-  const { title, description, likeCount, user, isPublic } = collection;
+  const { title, description, user, public: isPublic } = collection;
+  const likeCount = 5;
 
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={() => onClick?.()}>

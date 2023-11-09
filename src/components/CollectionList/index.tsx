@@ -2,7 +2,9 @@ import { FlatList } from 'react-native';
 import styled from 'styled-components';
 import CollectionItem from '../CollectionItem';
 
-interface CollectionListProp extends CollectionList {}
+type CollectionListProp = {
+  collections: CollectionListItem[];
+};
 
 const CollectionFlatList = styled(
   FlatList as new () => FlatList<CollectionListItem>,
@@ -15,7 +17,7 @@ const CollectionList = ({ collections }: CollectionListProp) => {
     <CollectionFlatList
       data={collections}
       renderItem={({ item }) => <CollectionItem collection={item} />}
-      keyExtractor={(item) => `${item.id}`}
+      keyExtractor={(item) => `${item.collectionId}`}
     />
   );
 };

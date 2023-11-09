@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import { RootStackParamList } from '~/navigations/RootStackNavigator';
 import ArticleItem from '../ArticleItem';
 
-interface ArticleListProp extends ArticleList {}
+type ArticleListProp = {
+  articles: ArticleListItem[];
+};
 
 const ArticleFlatList = styled(FlatList as new () => FlatList<ArticleListItem>)`
   padding: 0 10px;
@@ -23,13 +25,13 @@ const ArticleList = ({ articles }: ArticleListProp) => {
             navigation.navigate('Article', {
               screen: 'Detail',
               params: {
-                id: item.id,
+                id: item.articleId,
               },
             })
           }
         />
       )}
-      keyExtractor={(item) => `${item.id}`}
+      keyExtractor={(item) => `${item.articleId}`}
     />
   );
 };
