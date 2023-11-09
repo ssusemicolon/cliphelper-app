@@ -20,6 +20,17 @@ export const appendCollection = async (form: CollectionAppendForm) => {
   return data;
 };
 
+export const modifyCollection = async ({
+  collectionId,
+  form,
+}: {
+  collectionId: number;
+  form: CollectionModifyForm;
+}) => {
+  const { data } = await authAxios.patch(`/collections/${collectionId}`, form);
+  return data;
+};
+
 export const removeCollection = async (id: number) => {
   const { data } = await authAxios.delete(`/collections/${id}`);
   return data;

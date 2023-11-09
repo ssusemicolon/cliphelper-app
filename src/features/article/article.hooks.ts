@@ -8,6 +8,7 @@ import {
   modifyArticleCollection,
   removeArticle,
 } from './article.api';
+import { collectionKeys } from '../collection/collection.hooks';
 
 export const articleKeys = {
   all: 'article',
@@ -38,6 +39,7 @@ export const useArticleCollectionMutation = (id: number) => {
   return useMutation(modifyArticleCollection, {
     onSuccess: () => {
       queryClient.invalidateQueries(articleKeys.collection(id));
+      queryClient.invalidateQueries(collectionKeys.list());
     },
   });
 };

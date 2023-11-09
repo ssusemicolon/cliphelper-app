@@ -1,6 +1,6 @@
 import { ButtonIcon, Text } from '@gluestack-ui/themed';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import ArticleList from '~/components/ArticleList';
 import Header from '~/components/Header';
 import { SearchIcon } from '~/components/Icon/SearchIcon';
@@ -24,10 +24,6 @@ export const ArticleListScreen = () => {
 
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
-  }, []);
-
-  useEffect(() => {
-    handlePresentModalPress(30);
   }, []);
 
   if (!data) {
