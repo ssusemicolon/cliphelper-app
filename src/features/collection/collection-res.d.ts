@@ -3,13 +3,10 @@ interface CollectionListItem {
   title: string;
   thumbnail?: string;
   description: string;
-  articles: number[];
+  articles?: number[];
   articleCount: number;
   userId: number;
-  user?: {
-    username: string;
-    thumb: string;
-  };
+  user?: UserProfile;
   public: boolean;
 }
 

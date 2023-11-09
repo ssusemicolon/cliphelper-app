@@ -10,6 +10,7 @@ type ArticleListProp = {
 
 const ArticleFlatList = styled(FlatList as new () => FlatList<ArticleListItem>)`
   padding: 0 10px;
+  flex: 1;
 `;
 
 const ArticleList = ({ articles }: ArticleListProp) => {

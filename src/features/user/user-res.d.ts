@@ -1,5 +1,6 @@
 interface UserProfile {
-  id: number;
+  userId: number;
+  email: string;
   username: string;
-  thumb: string;
+  picture?: string;
 }

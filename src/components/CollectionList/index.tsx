@@ -4,6 +4,7 @@ import CollectionItem from '../CollectionItem';
 
 type CollectionListProp = {
   collections: CollectionListItem[];
+  onClickItem?: (id: number) => void;
 };
 
 const CollectionFlatList = styled(
@@ -12,11 +13,13 @@ const CollectionFlatList = styled(
   padding: 0 10px;
 `;
 
-const CollectionList = ({ collections }: CollectionListProp) => {
+const CollectionList = ({ collections, onClickItem }: CollectionListProp) => {
   return (
     <CollectionFlatList
       data={collections}
-      renderItem={({ item }) => <CollectionItem collection={item} />}
+      renderItem={({ item }) => (
+        <CollectionItem collection={item} onClick={onClickItem} />
+      )}
       keyExtractor={(item) => `${item.collectionId}`}
     />
   );

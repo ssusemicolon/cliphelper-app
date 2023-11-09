@@ -1,18 +1,30 @@
 import { Text } from '@gluestack-ui/themed';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import CollectionList from '~/components/CollectionList';
 import SafeView from '~/components/SafeView';
 import { useCollectionList } from '~/features/collection/collection.hooks';
+import { RootStackParamList } from '~/navigations/RootStackNavigator';
 
 export const MyCollectionListScreen = () => {
   const { data } = useCollectionList();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   if (!data) {
     return <Text>Loading...</Text>;
   }
 
+  const onClick = (id: number) => {
+    navigation.navigate('Collection', {
+      screen: 'Detail',
+      params: {
+        id,
+      },
+    });
+  };
+
   return (
     <SafeView>
-      <CollectionList collections={data} />
+      <CollectionList collections={data} onClickItem={onClick} />
     </SafeView>
   );
 };
@@ -25,7 +37,7 @@ export const MyBookmarkListScreen = () => {
   }
 
   return (
-    <SafeView>
+    <SafeView bottom>
       <CollectionList collections={data} />
     </SafeView>
   );
