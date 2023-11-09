@@ -7,7 +7,6 @@ const isValidUrl = (url: string) => {
     new URL(url);
     return true;
   } catch (e) {
-    console.log('is not valid url: ', url);
     return false;
   }
 };

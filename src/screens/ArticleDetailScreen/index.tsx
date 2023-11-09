@@ -1,29 +1,46 @@
-import { ButtonIcon } from '@gluestack-ui/themed';
-import { Text } from 'react-native-svg';
+import { ButtonIcon, EditIcon, HStack, Text } from '@gluestack-ui/themed';
+import { useCallback, useEffect, useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 import ArticleDetail from '~/components/ArticleDetail';
 import Header from '~/components/Header';
-import { SearchIcon } from '~/components/Icon/SearchIcon';
 import SafeView from '~/components/SafeView';
 import {
   useArticleDetail,
+  useArticleModifyMutation,
   useArticleRemoveMutation,
 } from '~/features/article/article.hooks';
 import { ArticleStackScreenProps } from '~/navigations/ArticleStackNavigator';
+import { useAppDispatch, useAppSelector } from '~/store';
+import { articleFormActions } from '~/store/slices/articleForm';
 
 export const ArticleDetailScreen = ({
   route,
   navigation,
 }: ArticleStackScreenProps<'Detail'>) => {
-  console.log('params: ', route.params);
   const { id } = route.params;
   const { data } = useArticleDetail(id);
+  const { mutate: modify } = useArticleModifyMutation(id);
   const { mutate: remove } = useArticleRemoveMutation();
+  const [editable, setEditable] = useState(false);
+  const articleForm = useAppSelector((state) => state.articleForm);
+  const dispatch = useAppDispatch();
 
-  console.log(data);
+  const init = useCallback(() => {
+    if (!data) {
+      return;
+    }
+    dispatch(articleFormActions.init(data));
+  }, [data, dispatch]);
+
+  useEffect(() => {
+    init();
+  }, [init]);
 
   if (!data) {
     return <Text>Loading...</Text>;
   }
+
+  const combinedArticle = { ...data, ...articleForm };
 
   const onDelete = () => {
     remove(id, {
@@ -37,12 +54,50 @@ export const ArticleDetailScreen = ({
     console.log('clicked');
   };
 
+  const onCancel = () => {
+    setEditable(false);
+    init();
+  };
+
+  const onSave = () => {
+    modify(articleForm, {
+      onSuccess: () => {
+        setEditable(false);
+      },
+    });
+  };
+
   return (
     <SafeView top>
       <Header
-        right={<ButtonIcon size="xl" color="$primary900" as={SearchIcon} />}
+        showTitle={false}
+        right={
+          editable ? (
+            <HStack gap={30}>
+              <TouchableOpacity onPress={onCancel}>
+                <Text color="$focus400" fontWeight="700">
+                  취소
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onSave}>
+                <Text color="$primary900" fontWeight="700">
+                  저장
+                </Text>
+              </TouchableOpacity>
+            </HStack>
+          ) : (
+            <TouchableOpacity onPress={() => setEditable(!editable)}>
+              <ButtonIcon size="xl" color="$primary900" as={EditIcon} />
+            </TouchableOpacity>
+          )
+        }
       />
-      <ArticleDetail onDelete={onDelete} onLink={onLink} {...data} />
+      <ArticleDetail
+        onDelete={onDelete}
+        onLink={onLink}
+        editable={editable}
+        {...combinedArticle}
+      />
     </SafeView>
   );
 };

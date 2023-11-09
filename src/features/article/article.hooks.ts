@@ -3,6 +3,7 @@ import {
   appendArticle,
   fetchArticleDetail,
   fetchArticleList,
+  modifyArticle,
   removeArticle,
 } from './article.api';
 
@@ -28,6 +29,16 @@ export const useArticleAppendMutation = () => {
   return useMutation(appendArticle, {
     onSuccess: () => {
       queryClient.invalidateQueries(articleKeys.list());
+    },
+  });
+};
+
+export const useArticleModifyMutation = (id: number) => {
+  const queryClient = useQueryClient();
+  return useMutation(modifyArticle, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(articleKeys.list());
+      queryClient.invalidateQueries(articleKeys.detail(id));
     },
   });
 };

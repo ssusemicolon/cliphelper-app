@@ -23,6 +23,12 @@ export const appendArticle = async (form: ArticleAppendForm) => {
   return data.data;
 };
 
+export const modifyArticle = async (form: ArticleAppendForm) => {
+  const { articleId, ...others } = form;
+  const data = await authAxios.patch(`/articles/${articleId}`, others);
+  return data.data;
+};
+
 export const removeArticle = async (id: number) => {
   const { data } = await authAxios.delete(`/articles/${id}`);
   return data.data;

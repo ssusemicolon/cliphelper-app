@@ -1,15 +1,8 @@
-import {
-  ButtonIcon,
-  HStack,
-  ScrollView,
-  Text,
-  VStack,
-} from '@gluestack-ui/themed';
-import { useState } from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { HStack, ScrollView, Text, VStack } from '@gluestack-ui/themed';
+import { useAppDispatch } from '~/store';
+import { articleFormActions } from '~/store/slices/articleForm';
 import { fromNow } from '~/utils/date-formatter';
 import CTAButton from '../CTAButton';
-import { SaveIcon } from '../Icon/SaveIcon';
 import ArticleThumb from '../Image/ArticleThumb';
 import Tags from '../Tags';
 import { ArticleTextArea } from './ArticleTextArea';
@@ -17,6 +10,8 @@ import { ArticleTextArea } from './ArticleTextArea';
 interface ArticleDetailProp extends ArticleDetail {
   onDelete?: () => void;
   onLink?: () => void;
+  onEdit?: () => void;
+  editable?: boolean;
 }
 
 const ArticleDetail = (prop: ArticleDetailProp) => {
@@ -30,9 +25,18 @@ const ArticleDetail = (prop: ArticleDetailProp) => {
     thumbnail,
     onDelete,
     onLink,
+    editable,
   } = prop;
 
-  const [memoContent, setMemoContent] = useState<string>(memo);
+  const dispatch = useAppDispatch();
+
+  const onChangeMemo = (t: string) => {
+    dispatch(articleFormActions.changeForm({ key: 'memo', value: t }));
+  };
+
+  const onChangeTags = (tagList: string[]) => {
+    dispatch(articleFormActions.changeForm({ key: 'tags', value: tagList }));
+  };
 
   return (
     <VStack justifyContent="space-between" paddingHorizontal={12} flex={1}>
@@ -54,34 +58,21 @@ const ArticleDetail = (prop: ArticleDetailProp) => {
             </VStack>
           </HStack>
 
-          <Tags tags={tags} edit />
+          <Tags tags={tags} edit={editable} setTags={onChangeTags} />
 
           <VStack>
             <HStack justifyContent="space-between" paddingHorizontal={10}>
               <Text fontWeight="700" fontSize={'$lg'}>
                 메모
               </Text>
-              <TouchableOpacity>
-                <HStack
-                  alignItems="center"
-                  justifyContent="center"
-                  borderLeftColor="$primary900"
-                  gap={2}
-                >
-                  <Text color="$primary900" fontWeight="600" fontSize={'$sm'}>
-                    저장
-                  </Text>
-                  <ButtonIcon color="$primary900" size="md" as={SaveIcon} />
-                </HStack>
-              </TouchableOpacity>
             </HStack>
             <ArticleTextArea
-              editable
+              editable={editable}
               multiline
               numberOfLines={10}
               maxLength={500}
-              value={memoContent}
-              onChangeText={(t) => setMemoContent(t)}
+              value={memo}
+              onChangeText={onChangeMemo}
               placeholder="공부한 내용을 메모해보세요.."
             />
           </VStack>

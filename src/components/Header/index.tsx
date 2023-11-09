@@ -10,11 +10,18 @@ type HeaderProps = {
   back?: boolean;
   left?: ReactNode;
   right?: ReactNode;
+  showTitle?: boolean;
 };
 
 const Header = (props: HeaderProps) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { title, back = navigation.canGoBack(), left, right } = props;
+  const {
+    title,
+    back = navigation.canGoBack(),
+    left,
+    right,
+    showTitle = true,
+  } = props;
 
   return (
     <HStack
@@ -42,17 +49,19 @@ const Header = (props: HeaderProps) => {
             {title}
           </Text>
         ) : (
-          <HStack alignItems="center" space="xs">
-            <Heading
-              fontSize={'$3xl'}
-              fontWeight="700"
-              color="$primary900"
-              alignItems="center"
-            >
-              {'Clip Helper'}
-            </Heading>
-            <LinkIcon color="$primary900" />
-          </HStack>
+          showTitle && (
+            <HStack alignItems="center" space="xs">
+              <Heading
+                fontSize={'$3xl'}
+                fontWeight="700"
+                color="$primary900"
+                alignItems="center"
+              >
+                {'Clip Helper'}
+              </Heading>
+              <LinkIcon color="$primary900" />
+            </HStack>
+          )
         )}
       </HStack>
       <HStack alignItems="center">{right}</HStack>
