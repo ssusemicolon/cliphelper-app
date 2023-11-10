@@ -1,4 +1,3 @@
-import { ButtonIcon } from '@gluestack-ui/themed';
 import {
   BottomTabNavigationProp,
   BottomTabScreenProps,
@@ -13,13 +12,9 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React from 'react';
-import Header from '~/components/Header';
-import { SearchIcon } from '~/components/Icon/SearchIcon';
 import SafeView from '~/components/SafeView';
-import {
-  MyBookmarkListScreen,
-  MyCollectionListScreen,
-} from '~/screens/CollectionListScreen';
+import { MyBookmarkListScreen } from '~/screens/CollectionListScreen';
+import { MyCollectionListScreen } from '~/screens/CollectionListScreen/MyCollectionListScreen';
 import { RootStackParamList } from '../RootStackNavigator';
 
 export type CollectionTopTabParamList = {
@@ -46,9 +41,6 @@ export type CollectionTopTabScreenProps<
 export const CollectionTopTabNavigator = () => {
   return (
     <SafeView>
-      <Header
-        right={<ButtonIcon size="xl" color="$primary900" as={SearchIcon} />}
-      />
       <Tab.Navigator id="BookmarkTab">
         <Tab.Screen name="My" component={MyCollectionListScreen} />
         <Tab.Screen name="Bookmark" component={MyBookmarkListScreen} />

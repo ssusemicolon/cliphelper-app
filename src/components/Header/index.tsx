@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { RootStackParamList } from '~/navigations/RootStackNavigator';
 import { LeftArrowIcon } from '../Icon/LeftArrowIcon';
 import IconButton from '../IconButton';
+import { DimensionValue } from 'react-native';
 
 type HeaderProps = {
   title?: string;
@@ -11,6 +12,7 @@ type HeaderProps = {
   left?: ReactNode;
   right?: ReactNode;
   showTitle?: boolean;
+  height?: DimensionValue;
 };
 
 const Header = (props: HeaderProps) => {
@@ -21,6 +23,7 @@ const Header = (props: HeaderProps) => {
     left,
     right,
     showTitle = true,
+    height = '7%',
   } = props;
 
   return (
@@ -28,7 +31,7 @@ const Header = (props: HeaderProps) => {
       justifyContent="space-between"
       width={'$full'}
       paddingHorizontal={16}
-      height={'8%'}
+      height={height}
     >
       <HStack alignItems="center" space={'md'}>
         {left}

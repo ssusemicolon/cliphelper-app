@@ -26,9 +26,6 @@ export const UserProfileScreen = () => {
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
 
   const {
     username,
@@ -129,7 +126,6 @@ export const UserProfileScreen = () => {
         ref={bottomSheetModalRef}
         index={0}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}
       >
         <TimeSelector />
       </BottomSheetModal>

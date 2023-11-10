@@ -3,6 +3,7 @@ import {
   appendCollection,
   fetchCollectionDetail,
   fetchCollectionList,
+  modifyCollection,
   removeCollection,
 } from './collection.api';
 
@@ -28,6 +29,17 @@ export const useCollectionAppendMutation = () => {
   return useMutation(appendCollection, {
     onSuccess: () => {
       queryClient.invalidateQueries(collectionKeys.list());
+    },
+  });
+};
+
+/** modify collection */
+export const useCollectionModifyMutation = (collectionId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation(modifyCollection, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(collectionKeys.list());
+      queryClient.invalidateQueries(collectionKeys.detail(collectionId));
     },
   });
 };

@@ -17,14 +17,11 @@ export const CollectionSelector = ({ articleId }: CollectionSelectorProps) => {
   const { data: articleCollections } = useArticleCollections(articleId);
   const { mutate: editCollections } = useArticleCollectionMutation(articleId);
 
-  console.log('articleId: ', articleId);
-
   if (!data || !article || !articleCollections) {
     return <Text>Loading...</Text>;
   }
 
   const onCheckItem = (collectionId: number, isChecked: boolean) => {
-    console.log('on check Item: ', collectionId, ' ', isChecked);
     const collections = isChecked
       ? [collectionId, ...articleCollections]
       : articleCollections.filter((ac) => ac !== collectionId);
