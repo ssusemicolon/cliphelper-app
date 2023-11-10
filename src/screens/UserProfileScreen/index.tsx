@@ -11,9 +11,21 @@ import { TouchableOpacity } from 'react-native';
 import { RoundedPlusIcon } from '~/components/Icon/PlusIcon';
 import SafeView from '~/components/SafeView';
 import demo from './demo.json';
+import { useCallback, useMemo, useRef } from 'react';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import TimeSelector from '~/components/TimeSelector';
 
 export const UserProfileScreen = () => {
   const { user } = JSON.parse(JSON.stringify(demo));
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['50%'], []);
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
 
   const {
     username,
@@ -80,14 +92,14 @@ export const UserProfileScreen = () => {
           <HStack justifyContent="space-around">
             {preferAlarmTime?.map((p: string) => {
               return (
-                <TouchableOpacity key={p}>
+                <TouchableOpacity key={p} onPress={handlePresentModalPress}>
                   <Text color="$primary900" fontSize={'$xl'} fontWeight="700">
                     {p}
                   </Text>
                 </TouchableOpacity>
               );
             })}
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handlePresentModalPress}>
               <ButtonIcon color="$primary900" as={RoundedPlusIcon} size="lg" />
             </TouchableOpacity>
           </HStack>
@@ -110,6 +122,13 @@ export const UserProfileScreen = () => {
           </HStack>
         </VStack>
       </ScrollView>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={0}
+        snapPoints={snapPoints}
+      >
+        <TimeSelector />
+      </BottomSheetModal>
     </SafeView>
   );
 };

@@ -1,32 +1,37 @@
 import { authAxios } from '../auth/auth.api';
 
-export const fetchCollectionList = async (type: CollectionType = 'MY') => {
-  const { data } = await authAxios.get<ResponseType<CollectionList>>(
-    '/collection',
-    {
-      params: {
-        type,
-      },
-    },
-  );
+export const fetchCollectionList = async () => {
+  const { data } =
+    await authAxios.get<ResponseType<CollectionListItem[]>>('/collections');
 
   return data.data;
 };
 
 export const fetchCollectionDetail = async (id: number) => {
   const { data } = await authAxios.get<ResponseType<CollectionDetail>>(
-    `/collection/${id}`,
+    `/collections/${id}`,
   );
 
   return data.data;
 };
 
 export const appendCollection = async (form: CollectionAppendForm) => {
-  const { data } = await authAxios.post('/collection', form);
+  const { data } = await authAxios.post('/collections', form);
+  return data;
+};
+
+export const modifyCollection = async ({
+  collectionId,
+  form,
+}: {
+  collectionId: number;
+  form: CollectionModifyForm;
+}) => {
+  const { data } = await authAxios.patch(`/collections/${collectionId}`, form);
   return data;
 };
 
 export const removeCollection = async (id: number) => {
-  const { data } = await authAxios.delete(`/collection/${id}`);
+  const { data } = await authAxios.delete(`/collections/${id}`);
   return data;
 };

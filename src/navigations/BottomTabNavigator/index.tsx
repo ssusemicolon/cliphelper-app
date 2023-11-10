@@ -26,7 +26,7 @@ export type MainTabParamList = {
   Home: undefined;
   Search: undefined;
   Form: undefined;
-  Bookmark: undefined;
+  Collections: undefined;
   Profile: undefined;
 };
 
@@ -47,7 +47,7 @@ export const MainTabNavigator = () => {
     <SafeView top bottom>
       <Tab.Navigator
         id="Main"
-        initialRouteName="Profile"
+        initialRouteName="Home"
         tabBar={BottomTabBar}
         screenOptions={{
           headerShown: false,
@@ -59,7 +59,7 @@ export const MainTabNavigator = () => {
         <Tab.Screen name="Home" component={ArticleListScreen} />
         <Tab.Screen name="Search" component={ArticleListScreen} />
         <Tab.Screen name="Form" component={ArticleFormScreen} />
-        <Tab.Screen name="Bookmark" component={CollectionTopTabNavigator} />
+        <Tab.Screen name="Collections" component={CollectionTopTabNavigator} />
         <Tab.Screen name="Profile" component={UserProfileScreen} />
       </Tab.Navigator>
     </SafeView>

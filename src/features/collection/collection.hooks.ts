@@ -3,10 +3,11 @@ import {
   appendCollection,
   fetchCollectionDetail,
   fetchCollectionList,
+  modifyCollection,
   removeCollection,
 } from './collection.api';
 
-const collectionKeys = {
+export const collectionKeys = {
   all: 'collection',
   list: () => [...collectionKeys.all, 'list'],
   detail: (id: number) => [...collectionKeys.all, 'detail', { id }],
@@ -17,13 +18,13 @@ export const useCollectionList = () => {
   return useQuery(collectionKeys.list(), () => fetchCollectionList());
 };
 
-/** fetch article detail */
-export const useArticleDetail = (id: number) => {
+/** fetch collection detail */
+export const useCollectionDetail = (id: number) => {
   return useQuery(collectionKeys.detail(id), () => fetchCollectionDetail(id));
 };
 
-/** append article */
-export const useArticleAppendMutation = () => {
+/** append collection */
+export const useCollectionAppendMutation = () => {
   const queryClient = useQueryClient();
   return useMutation(appendCollection, {
     onSuccess: () => {
@@ -32,8 +33,19 @@ export const useArticleAppendMutation = () => {
   });
 };
 
-/** remove article */
-export const useArticleRemoveMutation = () => {
+/** modify collection */
+export const useCollectionModifyMutation = (collectionId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation(modifyCollection, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(collectionKeys.list());
+      queryClient.invalidateQueries(collectionKeys.detail(collectionId));
+    },
+  });
+};
+
+/** remove collection */
+export const useCollectionRemoveMutation = () => {
   const queryClient = useQueryClient();
   return useMutation(removeCollection, {
     onSuccess: () => {

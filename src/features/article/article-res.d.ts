@@ -1,23 +1,17 @@
-interface ArticleList {
-  articles: ArticleListItem[];
-}
-
 interface ArticleListItem {
-  id: number;
-  thumb?: string;
+  articleId: number;
+  url?: string;
+  thumbnail?: string;
   title: string;
-  content: string;
+  description: string;
+  memo: string;
   createdAt: string;
   recentAccessTime: string;
-  tags: TagItem[];
+  tags: string[];
+  userId: number;
 }
 
 interface ArticleDetail extends ArticleListItem {
   url: string;
   questions?: string;
-}
-
-interface TagItem {
-  id: number;
-  title: string;
 }

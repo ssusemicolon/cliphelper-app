@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ClipHelper</string>
+    <string name="kakao_app_key">9579ef89a78b0d0be79b81ce9016f6b7</string>
 </resources>

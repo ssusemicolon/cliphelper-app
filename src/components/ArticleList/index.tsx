@@ -4,13 +4,17 @@ import styled from 'styled-components';
 import { RootStackParamList } from '~/navigations/RootStackNavigator';
 import ArticleItem from '../ArticleItem';
 
-interface ArticleListProp extends ArticleList {}
+type ArticleListProp = {
+  articles: ArticleListItem[];
+  onLongClick?: (articleId: number) => void;
+};
 
 const ArticleFlatList = styled(FlatList as new () => FlatList<ArticleListItem>)`
   padding: 0 10px;
+  flex: 1;
 `;
 
-const ArticleList = ({ articles }: ArticleListProp) => {
+const ArticleList = ({ articles, onLongClick }: ArticleListProp) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (
@@ -23,13 +27,14 @@ const ArticleList = ({ articles }: ArticleListProp) => {
             navigation.navigate('Article', {
               screen: 'Detail',
               params: {
-                id: item.id,
+                id: item.articleId,
               },
             })
           }
+          onLongClick={onLongClick}
         />
       )}
-      keyExtractor={(item) => `${item.id}`}
+      keyExtractor={(item) => `${item.articleId}`}
     />
   );
 };

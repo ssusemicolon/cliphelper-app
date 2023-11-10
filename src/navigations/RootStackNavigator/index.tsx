@@ -9,13 +9,20 @@ import {
   ArticleStackNavigator,
   ArticleStackParamList,
 } from '../ArticleStackNavigator';
+import { AuthStackNavigator } from '../AuthStackNavigator';
 import { MainTabNavigator, MainTabParamList } from '../BottomTabNavigator';
+import {
+  CollectionStackNavigator,
+  CollectionStackParamList,
+} from '../CollectionStackNavigator';
 
 export type RootStackParamList = {
   Welcome: undefined;
   Onboarding: undefined;
   Article: NavigatorScreenParams<ArticleStackParamList>;
+  Collection: NavigatorScreenParams<CollectionStackParamList>;
   Main: NavigatorScreenParams<MainTabParamList>;
+  Auth: undefined;
 };
 
 export type RootStackNavigationProp<T extends keyof RootStackParamList> =
@@ -35,7 +42,9 @@ export const RootStackNavigator = () => {
       }}
       initialRouteName={'Main'}
     >
+      <Stack.Screen name="Auth" component={AuthStackNavigator} />
       <Stack.Screen name="Article" component={ArticleStackNavigator} />
+      <Stack.Screen name="Collection" component={CollectionStackNavigator} />
       <Stack.Screen name="Main" component={MainTabNavigator} />
     </Stack.Navigator>
   );

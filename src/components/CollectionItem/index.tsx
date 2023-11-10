@@ -1,68 +1,109 @@
-import { HStack, Image, Text, VStack } from '@gluestack-ui/themed';
+import { HStack, Switch, Text, VStack } from '@gluestack-ui/themed';
+import { memo } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { EarthIcon } from '../Icon/EarthIcon';
 import { HeartIcon } from '../Icon/HeartIcon';
 import { LockIcon } from '../Icon/LockIcon';
+import { UserProfile } from '../UserProfile';
+import { ArticleTextArea } from '../ArticleDetail/ArticleTextArea';
 
 interface CollectionItemProp {
   collection: CollectionListItem;
-  onClick?: () => void;
+  onClick?: (id: number) => void;
+  onChange?: ({ title, description, isPublic }: CollectionModifyForm) => void;
+  editable?: boolean;
 }
 
-const CollectionItem = ({ collection, onClick }: CollectionItemProp) => {
-  const { title, description, likeCount, user, isPublic } = collection;
+const CollectionItem = ({
+  collection,
+  editable,
+  onClick,
+  onChange,
+}: CollectionItemProp) => {
+  const {
+    collectionId,
+    title,
+    description,
+    user,
+    public: isPublic,
+  } = collection;
+  const likeCount = 5;
 
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => onClick?.()}>
-      <VStack
-        marginVertical={5}
-        flex={1}
-        borderBottomWidth={1}
-        borderColor="$grey300"
+    <VStack marginVertical={5} borderBottomWidth={1} borderColor="$grey300">
+      <TouchableOpacity
+        disabled={!onClick}
+        activeOpacity={0.8}
+        onPress={() => onClick?.(collectionId)}
       >
-        {user && (
-          <HStack
-            justifyContent="flex-start"
-            alignItems="center"
-            gap={10}
-            padding={5}
-          >
-            <Image
-              width={35}
-              height={35}
-              borderRadius={50}
-              source={{ uri: user.thumb }}
-              alt="user thumbnail image"
-            />
-            <Text fontWeight="600" fontSize={'$md'}>
-              {user.username}
-            </Text>
-          </HStack>
-        )}
-        <HStack space="lg" padding={14}>
+        {user && <UserProfile user={user} />}
+        <HStack space="lg" paddingHorizontal={10} paddingVertical={5}>
           {isPublic
             ? !user && <EarthIcon color="$primary900" size="xl" />
             : !user && <LockIcon color="$primary900" size="xl" />}
           <VStack flex={1} gap={10}>
             <HStack justifyContent="space-between">
-              <Text fontWeight="700" fontSize={'$lg'}>
-                {title}
-              </Text>
-              {isPublic && (
+              {editable ? (
+                <VStack flex={1}>
+                  <Text>제목</Text>
+                  <ArticleTextArea
+                    editable={editable}
+                    maxLength={100}
+                    onChangeText={(t) => {
+                      onChange?.({ description, isPublic, title: t });
+                    }}
+                    value={title}
+                  />
+                </VStack>
+              ) : (
+                <Text fontWeight="700" fontSize={'$lg'}>
+                  {title}
+                </Text>
+              )}
+              {isPublic && !editable && (
                 <HStack gap={5} alignItems="center">
                   <HeartIcon color="$focus300" size="md" />
                   <Text>{likeCount}</Text>
                 </HStack>
               )}
             </HStack>
-            <Text fontSize={'$sm'} flexWrap="wrap">
-              {description}
-            </Text>
+
+            {editable ? (
+              <VStack>
+                <Text>설명</Text>
+                <ArticleTextArea
+                  editable={editable}
+                  maxLength={50}
+                  onChangeText={(t) => {
+                    onChange?.({ description: t, isPublic, title });
+                  }}
+                  value={description}
+                />
+              </VStack>
+            ) : (
+              <Text fontSize={'$sm'} flexWrap="wrap">
+                {description}
+              </Text>
+            )}
+
+            {editable && (
+              <VStack>
+                <Text>공개</Text>
+                <Switch
+                  size="sm"
+                  trackColor={{ false: '$grey500', true: '$secondary900' }}
+                  defaultValue={isPublic}
+                  onValueChange={(selected) =>
+                    onChange?.({ description, isPublic: selected, title })
+                  }
+                />
+              </VStack>
+            )}
           </VStack>
         </HStack>
-      </VStack>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </VStack>
   );
 };
 
-export default CollectionItem;
+export default memo(CollectionItem);

@@ -47,7 +47,7 @@ const BottomTabBar = ({ state, navigation }: BottomTabBarProps) => {
         active={index === 2}
       />
       <Tab
-        onClick={() => navigation.navigate('Bookmark')}
+        onClick={() => navigation.navigate('Collections')}
         icon={BookmarkIcon}
         active={index === 3}
       />

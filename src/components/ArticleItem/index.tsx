@@ -7,12 +7,17 @@ import Tags from '../Tags';
 interface ArticleItemProp {
   article: ArticleListItem;
   onClick?: () => void;
+  onLongClick?: (id: number) => void;
 }
 
-const ArticleItem = ({ article, onClick }: ArticleItemProp) => {
-  const { thumb, title, tags, content, createdAt } = article;
+const ArticleItem = ({ article, onClick, onLongClick }: ArticleItemProp) => {
+  const { articleId, thumbnail, title, tags, memo, createdAt } = article;
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => onClick?.()}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => onClick?.()}
+      onLongPress={() => onLongClick?.(articleId)}
+    >
       <VStack
         justifyContent="center"
         space="md"
@@ -25,16 +30,18 @@ const ArticleItem = ({ article, onClick }: ArticleItemProp) => {
             {fromNow(createdAt)}
           </Text>
         </HStack>
-        <HStack>{thumb && <ArticleThumb src={thumb} />}</HStack>
+        <HStack>{thumbnail && <ArticleThumb src={thumbnail} />}</HStack>
         <HStack space="lg" paddingHorizontal={5}>
           <VStack space="xs">
             <Text fontWeight="700" fontSize={'$lg'}>
               {title}
             </Text>
 
-            <Text>
-              {content.length > 50 ? `${content.substring(0, 50)}...` : content}
-            </Text>
+            {memo && (
+              <Text>
+                {memo.length > 50 ? `${memo.substring(0, 50)}...` : memo}
+              </Text>
+            )}
           </VStack>
         </HStack>
         <Tags tags={tags} />

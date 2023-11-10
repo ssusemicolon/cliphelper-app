@@ -4,24 +4,34 @@ import { ReactNode } from 'react';
 import { RootStackParamList } from '~/navigations/RootStackNavigator';
 import { LeftArrowIcon } from '../Icon/LeftArrowIcon';
 import IconButton from '../IconButton';
+import { DimensionValue } from 'react-native';
 
 type HeaderProps = {
   title?: string;
   back?: boolean;
   left?: ReactNode;
   right?: ReactNode;
+  showTitle?: boolean;
+  height?: DimensionValue;
 };
 
 const Header = (props: HeaderProps) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { title, back = navigation.canGoBack(), left, right } = props;
+  const {
+    title,
+    back = navigation.canGoBack(),
+    left,
+    right,
+    showTitle = true,
+    height = '7%',
+  } = props;
 
   return (
     <HStack
       justifyContent="space-between"
       width={'$full'}
       paddingHorizontal={16}
-      height={'8%'}
+      height={height}
     >
       <HStack alignItems="center" space={'md'}>
         {left}
@@ -42,17 +52,19 @@ const Header = (props: HeaderProps) => {
             {title}
           </Text>
         ) : (
-          <HStack alignItems="center" space="xs">
-            <Heading
-              fontSize={'$3xl'}
-              fontWeight="700"
-              color="$primary900"
-              alignItems="center"
-            >
-              {'Clip Helper'}
-            </Heading>
-            <LinkIcon color="$primary900" />
-          </HStack>
+          showTitle && (
+            <HStack alignItems="center" space="xs">
+              <Heading
+                fontSize={'$3xl'}
+                fontWeight="700"
+                color="$primary900"
+                alignItems="center"
+              >
+                {'Clip Helper'}
+              </Heading>
+              <LinkIcon color="$primary900" />
+            </HStack>
+          )
         )}
       </HStack>
       <HStack alignItems="center">{right}</HStack>

@@ -1,18 +1,15 @@
-interface CollectionList {
-  collections: CollectionListItem[];
-}
-
 interface CollectionListItem {
-  id: number;
+  collectionId: 1;
   title: string;
+  thumbnail?: string;
   description: string;
-  likeCount: number;
+  articles?: ArticleListItem[];
+  articleCount: number;
+  userId: number;
   user?: UserProfile;
-  isPublic: boolean;
+  public: boolean;
 }
 
 interface CollectionDetail extends CollectionListItem {
   articles: ArticleListItem[];
 }
-
-type CollectionType = 'MY' | 'OTHER';
