@@ -9,8 +9,9 @@ import {
   VStack,
 } from '@gluestack-ui/themed';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { TextInput, TouchableOpacity } from 'react-native';
+import styled from 'styled-components';
 import { RoundedPlusIcon } from '~/components/Icon/PlusIcon';
 import SafeView from '~/components/SafeView';
 import TimeSelector from '~/components/TimeSelector';
@@ -22,11 +23,30 @@ import {
   useRemoveAlarmMutation,
   useUserProfile,
 } from '~/features/user/user.hooks';
+import { colors } from '~/theme';
 
+const UserTextArea = styled(TextInput)`
+  font-size: 16px;
+  padding: 10px 10px;
+  border-radius: 8px;
+  border: 1px solid #c8c8c8;
+  width: 200px;
+  background-color: ${() => colors.grey100};
+`;
+
+/**
+ * @todo 사용자 프로필 편집
+ *
+ */
 export const UserProfileScreen = () => {
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  // profile
   const { data: user } = useUserProfile();
-  let { data: alarm } = useAlarm();
+  const [enableEdit, setEnableEdit] = useState(false);
+  const [editUsername, setEditUsername] = useState('');
+
+  // alarm
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const { data: alarm } = useAlarm();
   const [selectedAlarmId, setSelectedAlarmId] = useState(0);
   const [currentAlarmTime, setCurrentAlarmTime] = useState('12:30');
   const { mutate: appendAlarm } = useAppendAlarmMutation();
@@ -34,7 +54,6 @@ export const UserProfileScreen = () => {
   const { mutate: removeAlarm } = useRemoveAlarmMutation();
   const { mutate: enableAlarm } = useEnableAlarmMutation();
 
-  // variables
   const snapPoints = useMemo(() => ['50%'], []);
 
   // callbacks
@@ -78,13 +97,19 @@ export const UserProfileScreen = () => {
     });
   };
 
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+    setEditUsername(user.username);
+  }, [user]);
+
   if (!user) {
     return <Text>Loading...</Text>;
   }
 
   const {
-    // userId,
-    // email,
+    email,
     username,
     picture,
     enableNotifications,
@@ -96,11 +121,32 @@ export const UserProfileScreen = () => {
   return (
     <SafeView>
       <ScrollView>
-        <VStack borderWidth={1} bgColor="$primary900" paddingBottom={25}>
+        <VStack bgColor="$primary900" paddingBottom={25}>
           <HStack justifyContent="flex-end" padding={10}>
-            <ButtonIcon size="xl" color="$grey100" as={EditIcon} />
+            {enableEdit ? (
+              <HStack alignItems="center" justifyContent="center" gap={20}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setEnableEdit(false);
+                  }}
+                >
+                  <Text fontSize={'$md'} fontWeight="700" color="$focus300">
+                    취소
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text fontSize={'$md'} fontWeight="700" color="$secondary700">
+                    저장
+                  </Text>
+                </TouchableOpacity>
+              </HStack>
+            ) : (
+              <TouchableOpacity onPress={() => setEnableEdit(true)}>
+                <ButtonIcon size="xl" color="$grey100" as={EditIcon} />
+              </TouchableOpacity>
+            )}
           </HStack>
-          <VStack alignItems="center" gap={12}>
+          <VStack alignItems="center" gap={12} flex={1}>
             <Image
               width={150}
               height={150}
@@ -112,9 +158,23 @@ export const UserProfileScreen = () => {
               }
               alt="user thumbnail image"
             />
-            <Text fontWeight="700" fontSize={'$lg'} color="$grey100">
-              {username}
-            </Text>
+            <VStack alignItems="center" width={'100%'} gap={10}>
+              <Text fontWeight="700" fontSize={'$lg'} color="$grey100">
+                {email}
+              </Text>
+              {enableEdit ? (
+                <UserTextArea
+                  maxLength={10}
+                  numberOfLines={1}
+                  value={editUsername}
+                  onChangeText={(t) => setEditUsername(t)}
+                />
+              ) : (
+                <Text fontWeight="700" fontSize={'$lg'} color="$grey100">
+                  {username}
+                </Text>
+              )}
+            </VStack>
           </VStack>
         </VStack>
 
@@ -163,6 +223,7 @@ export const UserProfileScreen = () => {
               {alarm?.map(({ alarmTimeId, time }: AlarmListItem) => {
                 return (
                   <TouchableOpacity
+                    disabled={!enableNotifications}
                     key={alarmTimeId}
                     onPress={() => {
                       setCurrentAlarmTime(time);
@@ -170,7 +231,11 @@ export const UserProfileScreen = () => {
                       handlePresentModalPress();
                     }}
                   >
-                    <Text color="$primary900" fontSize={'$xl'} fontWeight="700">
+                    <Text
+                      color={enableNotifications ? '$primary900' : '$grey400'}
+                      fontSize={'$xl'}
+                      fontWeight="700"
+                    >
                       {time}
                     </Text>
                   </TouchableOpacity>
