@@ -13,7 +13,7 @@ import {
 } from '@react-navigation/native-stack';
 import React from 'react';
 import SafeView from '~/components/SafeView';
-import { MyBookmarkListScreen } from '~/screens/CollectionListScreen';
+import { MyBookmarkListScreen } from '~/screens/CollectionListScreen/MyBookmartListScreen';
 import { MyCollectionListScreen } from '~/screens/CollectionListScreen/MyCollectionListScreen';
 import { RootStackParamList } from '../RootStackNavigator';
 

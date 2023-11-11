@@ -19,6 +19,7 @@ import { ArticleListScreen } from '~/screens/ArticleListScreen';
 import { CollectionTopTabNavigator } from '../CollectionTopNavigator';
 import { RootStackParamList } from '../RootStackNavigator';
 import { UserProfileScreen } from '~/screens/UserProfileScreen';
+import { PopularCollectionListScreen } from '~/screens/CollectionListScreen/PopularCollectionListScreen';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -57,7 +58,7 @@ export const MainTabNavigator = () => {
         }}
       >
         <Tab.Screen name="Home" component={ArticleListScreen} />
-        <Tab.Screen name="Search" component={ArticleListScreen} />
+        <Tab.Screen name="Search" component={PopularCollectionListScreen} />
         <Tab.Screen name="Form" component={ArticleFormScreen} />
         <Tab.Screen name="Collections" component={CollectionTopTabNavigator} />
         <Tab.Screen name="Profile" component={UserProfileScreen} />

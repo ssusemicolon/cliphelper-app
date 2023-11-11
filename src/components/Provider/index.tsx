@@ -11,7 +11,15 @@ import { ThemeProvider } from '~/theme';
 import PersistProvider from '../../store/PersistProvider';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
-const client = new QueryClient();
+const client = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+      staleTime: 30000,
+    },
+  },
+});
 
 const AppProvider = ({ children }: PropsWithChildren) => {
   return (

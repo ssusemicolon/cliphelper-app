@@ -3,7 +3,6 @@ import { authAxios } from '../auth/auth.api';
 export const fetchCollectionList = async () => {
   const { data } =
     await authAxios.get<ResponseType<CollectionListItem[]>>('/collections');
-
   return data.data;
 };
 
@@ -12,6 +11,14 @@ export const fetchCollectionDetail = async (id: number) => {
     `/collections/${id}`,
   );
 
+  return data.data;
+};
+
+export const fetchPopularCollectionList = async () => {
+  const { data } =
+    await authAxios.get<ResponseType<CollectionListItem[]>>(
+      '/collections/other',
+    );
   return data.data;
 };
 

@@ -6,31 +6,52 @@ import WheelPicker from 'react-native-wheely';
 import { colors } from '~/theme';
 
 type TimeSelectorProps = {
+  id?: number;
   time?: string;
-  onSelect?: (selectedTime: string) => void;
+  onRemove?: (id: number) => void;
+  onSelect?: (id: number, selectedTime: string) => void;
   onCancel?: () => void;
 };
 
-const TimeSelector = ({ time, onSelect, onCancel }: TimeSelectorProps) => {
-  const hours = [...Array(24).keys()].map((k) => k.toString());
+const TimeSelector = ({
+  id = 0,
+  time,
+  onRemove,
+  onSelect,
+  onCancel,
+}: TimeSelectorProps) => {
+  const hours = [...Array(24).keys()].map((k) => k.toString().padStart(2, '0'));
   const minutes = [...Array(60 / 10).keys()].map((k) => (k * 10).toString());
 
   const [initHour, initMinute] = time?.split(':') || ['0', '0'];
+  const hourIndex = hours.findIndex((h) => h === initHour);
+  const minuteIndex = minutes.findIndex((m) => m === initMinute);
 
   const [selectedHourIndex, setSelectedHourIndex] = useState(
-    hours.findIndex((h) => h === initHour) || 0,
+    hourIndex < 0 ? 0 : hourIndex,
   );
   const [selectedMinuteIndex, setSelectedMinuteIndex] = useState(
-    minutes.findIndex((m) => m === initMinute) || 0,
+    minuteIndex < 0 ? 0 : minuteIndex,
   );
 
   const onSave = () => {
-    onSelect?.(`${hours[selectedHourIndex]}:${minutes[selectedMinuteIndex]}`);
+    onSelect?.(
+      id || 0,
+      `${hours[selectedHourIndex]}:${minutes[selectedMinuteIndex]}`,
+    );
   };
 
   return (
     <VStack>
       <HStack paddingHorizontal={12} justifyContent="flex-end" gap={20}>
+        {id > 0 && (
+          <TouchableOpacity onPress={() => onRemove?.(id)}>
+            <Text fontSize={'$md'} fontWeight="700" color="$focus300">
+              삭제
+            </Text>
+          </TouchableOpacity>
+        )}
+
         <TouchableOpacity onPress={onCancel}>
           <Text fontSize={'$md'} fontWeight="700" color="$focus300">
             취소
@@ -58,7 +79,6 @@ const TimeSelector = ({ time, onSelect, onCancel }: TimeSelectorProps) => {
           selectedIndex={selectedHourIndex}
           options={hours}
           onChange={(index) => setSelectedHourIndex(index)}
-          // rotationFunction={(index) => index}
         />
         <Text fontSize={24}>:</Text>
         <WheelPicker
