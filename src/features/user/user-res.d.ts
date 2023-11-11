@@ -2,7 +2,7 @@ interface UserProfile {
   userId: 1;
   email: string;
   username: string;
-  picture: null;
+  picture?: string;
   enableNotifications: false;
   articleCount: number;
   collectionCount: number;

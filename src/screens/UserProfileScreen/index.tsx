@@ -15,6 +15,7 @@ import styled from 'styled-components';
 import { RoundedPlusIcon } from '~/components/Icon/PlusIcon';
 import SafeView from '~/components/SafeView';
 import TimeSelector from '~/components/TimeSelector';
+import { useLogoutMutation } from '~/features/auth/auth.hooks';
 import {
   useAlarm,
   useAppendAlarmMutation,
@@ -54,7 +55,12 @@ export const UserProfileScreen = () => {
   const { mutate: removeAlarm } = useRemoveAlarmMutation();
   const { mutate: enableAlarm } = useEnableAlarmMutation();
 
+  // auth
+  const { mutate: logOutMutate } = useLogoutMutation();
+
   const snapPoints = useMemo(() => ['50%'], []);
+
+  console.log('user: rendering');
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -153,7 +159,7 @@ export const UserProfileScreen = () => {
               borderRadius={80}
               source={
                 picture
-                  ? { uri: picture }
+                  ? { uri: picture?.replace('http', 'https') }
                   : require('~/assets/images/default_profile.png')
               }
               alt="user thumbnail image"
@@ -193,7 +199,7 @@ export const UserProfileScreen = () => {
               {collectionCount}
             </Text>
             <Text color="$primary900" fontSize={'$md'} fontWeight="600">
-              북마크
+              컬렉션
             </Text>
           </VStack>
 
@@ -269,13 +275,17 @@ export const UserProfileScreen = () => {
             계정관리
           </Text>
           <HStack paddingLeft={10} gap={10}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                logOutMutate();
+              }}
+            >
               <Text color="$primary900" fontWeight="700">
                 로그아웃
               </Text>
             </TouchableOpacity>
             <TouchableOpacity>
-              <Text color="$primary900" fontWeight="700">
+              <Text color="$focus400" fontWeight="700">
                 회원탈퇴
               </Text>
             </TouchableOpacity>

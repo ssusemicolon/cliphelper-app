@@ -8,20 +8,31 @@ import {
 } from '@gluestack-ui/themed';
 import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import SafeView from '~/components/SafeView';
+import { useLoginMutation } from '~/features/auth/auth.hooks';
 import { useGoogleAuth } from '~/features/auth/useGoogleAuth';
 import { useKakaoAuth } from '~/features/auth/useKakaoAuth';
 
 export const SignInScreen = () => {
   const { login: kakaoLogin } = useKakaoAuth();
   const { login: googleLogin } = useGoogleAuth();
+  const { mutate: login } = useLoginMutation();
 
   const onGoogleLogin = async () => {
-    const result = await googleLogin();
-    console.log(result);
+    const { idToken } = await googleLogin();
+    if (!idToken) {
+      console.log('google id token이 없습니다');
+      throw new Error('로그인에 실패하였습니다.');
+    }
+    login({ type: 'GOOGLE', key: idToken });
   };
 
   const onKakaoLogin = async () => {
-    await kakaoLogin();
+    const result = await kakaoLogin();
+    if (!result?.accessToken) {
+      console.log('카카오 access token 이 없습니다');
+      throw new Error('로그인에 실패하였습니다.');
+    }
+    login({ type: 'KAKAO', key: result?.accessToken });
   };
 
   return (
