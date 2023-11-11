@@ -1,6 +1,6 @@
 import ArticleForm from '~/components/ArticleForm';
 import SafeView from '~/components/SafeView';
-import { MainTabScreenProps } from '~/navigations/BottomTabNavigator';
+import { MainTabScreenProps } from '~/navigations/MainTabNavigator';
 
 const ArticleFormScreen = ({ navigation }: MainTabScreenProps<'Form'>) => {
   const onSuccess = () => {

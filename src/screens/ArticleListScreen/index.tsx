@@ -22,10 +22,6 @@ export const ArticleListScreen = () => {
     bottomSheetModalRef.current?.present();
   }, []);
 
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
-
   if (!data) {
     return <Text>Loading...</Text>;
   }
@@ -40,7 +36,6 @@ export const ArticleListScreen = () => {
         ref={bottomSheetModalRef}
         index={0}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}
       >
         <CollectionSelector articleId={selectedArticle} />
       </BottomSheetModal>

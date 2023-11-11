@@ -3,6 +3,7 @@ import {
   appendCollection,
   fetchCollectionDetail,
   fetchCollectionList,
+  fetchPopularCollectionList,
   modifyCollection,
   removeCollection,
 } from './collection.api';
@@ -10,12 +11,18 @@ import {
 export const collectionKeys = {
   all: 'collection',
   list: () => [...collectionKeys.all, 'list'],
+  popular: () => [...collectionKeys.all, 'popular'],
   detail: (id: number) => [...collectionKeys.all, 'detail', { id }],
 };
 
 /** fetch collection list */
 export const useCollectionList = () => {
   return useQuery(collectionKeys.list(), () => fetchCollectionList());
+};
+
+/** fetch popular collection list */
+export const usePopularCollectionList = () => {
+  return useQuery(collectionKeys.popular(), () => fetchPopularCollectionList());
 };
 
 /** fetch collection detail */

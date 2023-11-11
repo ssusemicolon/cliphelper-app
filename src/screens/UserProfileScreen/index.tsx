@@ -4,20 +4,35 @@ import {
   HStack,
   Image,
   ScrollView,
+  Switch,
   Text,
   VStack,
 } from '@gluestack-ui/themed';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { RoundedPlusIcon } from '~/components/Icon/PlusIcon';
 import SafeView from '~/components/SafeView';
-import demo from './demo.json';
-import { useCallback, useMemo, useRef } from 'react';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import TimeSelector from '~/components/TimeSelector';
+import {
+  useAlarm,
+  useAppendAlarmMutation,
+  useEnableAlarmMutation,
+  useModifyAlarmMutation,
+  useRemoveAlarmMutation,
+  useUserProfile,
+} from '~/features/user/user.hooks';
 
 export const UserProfileScreen = () => {
-  const { user } = JSON.parse(JSON.stringify(demo));
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const { data: user } = useUserProfile();
+  let { data: alarm } = useAlarm();
+  const [selectedAlarmId, setSelectedAlarmId] = useState(0);
+  const [currentAlarmTime, setCurrentAlarmTime] = useState('12:30');
+  const { mutate: appendAlarm } = useAppendAlarmMutation();
+  const { mutate: modifyAlarm } = useModifyAlarmMutation();
+  const { mutate: removeAlarm } = useRemoveAlarmMutation();
+  const { mutate: enableAlarm } = useEnableAlarmMutation();
 
   // variables
   const snapPoints = useMemo(() => ['50%'], []);
@@ -27,13 +42,55 @@ export const UserProfileScreen = () => {
     bottomSheetModalRef.current?.present();
   }, []);
 
+  const handleNotifications = (isEnable: boolean) => {
+    enableAlarm(isEnable);
+  };
+
+  const handleCancelAlarm = () => {
+    bottomSheetModalRef.current?.close();
+  };
+
+  const handleRemoveAlarm = (id: number) => {
+    removeAlarm(id, {
+      onSuccess: () => {
+        bottomSheetModalRef.current?.close();
+      },
+    });
+  };
+
+  const handleSelectAlarm = (id: number, time: string) => {
+    if (id) {
+      modifyAlarm(
+        { alarmId: id, time },
+        {
+          onSuccess: () => {
+            bottomSheetModalRef.current?.close();
+          },
+        },
+      );
+      return;
+    }
+
+    appendAlarm(time, {
+      onSuccess: () => {
+        bottomSheetModalRef.current?.close();
+      },
+    });
+  };
+
+  if (!user) {
+    return <Text>Loading...</Text>;
+  }
+
   const {
+    // userId,
+    // email,
     username,
-    thumb,
-    numberOfArticle,
-    numberOfCollection,
-    numberOfFollower,
-    preferAlarmTime,
+    picture,
+    enableNotifications,
+    articleCount,
+    collectionCount,
+    followerCount,
   } = user;
 
   return (
@@ -48,7 +105,11 @@ export const UserProfileScreen = () => {
               width={150}
               height={150}
               borderRadius={80}
-              source={{ uri: thumb }}
+              source={
+                picture
+                  ? { uri: picture }
+                  : require('~/assets/images/default_profile.png')
+              }
               alt="user thumbnail image"
             />
             <Text fontWeight="700" fontSize={'$lg'} color="$grey100">
@@ -60,7 +121,7 @@ export const UserProfileScreen = () => {
         <HStack justifyContent="space-around" paddingVertical={25}>
           <VStack alignItems="center" gap={5}>
             <Text color="$primary900" fontSize={'$xl'} fontWeight="700">
-              {numberOfArticle}
+              {articleCount}
             </Text>
             <Text color="$primary900" fontSize={'$md'} fontWeight="600">
               스크랩
@@ -69,7 +130,7 @@ export const UserProfileScreen = () => {
 
           <VStack alignItems="center" gap={5}>
             <Text color="$primary900" fontSize={'$xl'} fontWeight="700">
-              {numberOfCollection}
+              {collectionCount}
             </Text>
             <Text color="$primary900" fontSize={'$md'} fontWeight="600">
               북마크
@@ -78,31 +139,65 @@ export const UserProfileScreen = () => {
 
           <VStack alignItems="center" gap={5}>
             <Text color="$primary900" fontSize={'$xl'} fontWeight="700">
-              {numberOfFollower}
+              {followerCount}
             </Text>
             <Text color="$primary900" fontSize={'$md'} fontWeight="600">
               팔로워
             </Text>
           </VStack>
         </HStack>
-        <VStack paddingHorizontal={20} marginTop={20} gap={20}>
-          <Text fontWeight="700" fontSize={'$lg'}>
-            알림받을 시간
-          </Text>
-          <HStack justifyContent="space-around">
-            {preferAlarmTime?.map((p: string) => {
-              return (
-                <TouchableOpacity key={p} onPress={handlePresentModalPress}>
-                  <Text color="$primary900" fontSize={'$xl'} fontWeight="700">
-                    {p}
-                  </Text>
+        <VStack paddingHorizontal={10} marginTop={20} gap={20}>
+          <VStack paddingHorizontal={20} marginTop={20} gap={20}>
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text fontWeight="700" fontSize={'$lg'}>
+                알림받을 시간
+              </Text>
+              <Switch
+                size="sm"
+                trackColor={{ false: '$grey500', true: '$secondary900' }}
+                defaultValue={enableNotifications}
+                onValueChange={(selected) => handleNotifications(selected)}
+              />
+            </HStack>
+            <HStack justifyContent="space-around">
+              {alarm?.map(({ alarmTimeId, time }: AlarmListItem) => {
+                return (
+                  <TouchableOpacity
+                    key={alarmTimeId}
+                    onPress={() => {
+                      setCurrentAlarmTime(time);
+                      setSelectedAlarmId(alarmTimeId);
+                      handlePresentModalPress();
+                    }}
+                  >
+                    <Text color="$primary900" fontSize={'$xl'} fontWeight="700">
+                      {time}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+              {alarm && alarm?.length < 4 && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setCurrentAlarmTime('12:30');
+                    setSelectedAlarmId(0);
+                    handlePresentModalPress();
+                  }}
+                >
+                  <HStack gap={3} alignItems="center">
+                    <Text fontWeight="700" color="$primary900">
+                      알림추가
+                    </Text>
+                    <ButtonIcon
+                      color="$primary900"
+                      as={RoundedPlusIcon}
+                      size="lg"
+                    />
+                  </HStack>
                 </TouchableOpacity>
-              );
-            })}
-            <TouchableOpacity onPress={handlePresentModalPress}>
-              <ButtonIcon color="$primary900" as={RoundedPlusIcon} size="lg" />
-            </TouchableOpacity>
-          </HStack>
+              )}
+            </HStack>
+          </VStack>
         </VStack>
         <VStack justifyContent="flex-end" marginTop={50} padding={20} gap={20}>
           <Text fontWeight="700" fontSize={'$lg'}>
@@ -127,7 +222,13 @@ export const UserProfileScreen = () => {
         index={0}
         snapPoints={snapPoints}
       >
-        <TimeSelector />
+        <TimeSelector
+          id={selectedAlarmId}
+          time={currentAlarmTime}
+          onRemove={handleRemoveAlarm}
+          onCancel={handleCancelAlarm}
+          onSelect={handleSelectAlarm}
+        />
       </BottomSheetModal>
     </SafeView>
   );

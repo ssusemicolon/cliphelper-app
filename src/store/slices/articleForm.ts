@@ -18,7 +18,6 @@ const articleFormSlice = createSlice({
         state[key as keyof ArticleAppendForm] = value;
       });
       state = { ...action.payload };
-      // console.log('init: ', state);
     },
     changeForm: <T extends keyof ArticleAppendForm>(
       state: ArticleAppendForm,

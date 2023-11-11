@@ -10,7 +10,7 @@ import {
   ArticleStackParamList,
 } from '../ArticleStackNavigator';
 import { AuthStackNavigator } from '../AuthStackNavigator';
-import { MainTabNavigator, MainTabParamList } from '../BottomTabNavigator';
+import { MainTabNavigator, MainTabParamList } from '../MainTabNavigator';
 import {
   CollectionStackNavigator,
   CollectionStackParamList,
