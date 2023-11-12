@@ -31,7 +31,6 @@ export const parseSite = async (url: string) => {
 
     return { title, thumbnail, description };
   } catch (e) {
-    console.log('is error: ', e);
     return;
   }
 };

@@ -7,6 +7,14 @@ export const fetchUserProfile = async () => {
   return data.data;
 };
 
+/** 닉네임 변경 */
+export const modifyUsername = async (username: string) => {
+  const { data } = await authAxios.patch<ResponseType<{}>>('/users/username', {
+    username,
+  });
+  return data.data;
+};
+
 /** 알람 조회 */
 export const fetchUserAlarm = async () => {
   const { data } =

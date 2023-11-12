@@ -5,8 +5,10 @@ import {
   fetchUserAlarm,
   fetchUserProfile,
   modifyAlarm,
+  modifyUsername,
   removeAlarm,
 } from './user.api';
+import { collectionKeys } from '../collection/collection.hooks';
 
 export const userKeys = {
   all: 'user',
@@ -17,6 +19,17 @@ export const userKeys = {
 /** fetch user profile */
 export const useUserProfile = () => {
   return useQuery(userKeys.profile(), () => fetchUserProfile());
+};
+
+/** modify user name */
+export const useUsernameModifyMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(modifyUsername, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(userKeys.profile());
+      queryClient.invalidateQueries(collectionKeys.list());
+    },
+  });
 };
 
 /** fetch alarm list */

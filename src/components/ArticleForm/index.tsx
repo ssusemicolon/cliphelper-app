@@ -57,7 +57,6 @@ const ArticleForm = ({ onSuccess }: ArticleFormProps) => {
 
   const getSiteInfo = useDebounce(async (t: string) => {
     const result = await parseSite(t);
-    console.log('result: ', result);
     if (result?.title) {
       setTitle(result?.title);
     }

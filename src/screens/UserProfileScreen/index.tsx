@@ -23,6 +23,7 @@ import {
   useModifyAlarmMutation,
   useRemoveAlarmMutation,
   useUserProfile,
+  useUsernameModifyMutation,
 } from '~/features/user/user.hooks';
 import { colors } from '~/theme';
 
@@ -44,6 +45,7 @@ export const UserProfileScreen = () => {
   const { data: user } = useUserProfile();
   const [enableEdit, setEnableEdit] = useState(false);
   const [editUsername, setEditUsername] = useState('');
+  const { mutate: modifyUsername } = useUsernameModifyMutation();
 
   // alarm
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -60,9 +62,8 @@ export const UserProfileScreen = () => {
 
   const snapPoints = useMemo(() => ['50%'], []);
 
-  console.log('user: rendering');
-
   // callbacks
+  // alarm
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
@@ -99,6 +100,15 @@ export const UserProfileScreen = () => {
     appendAlarm(time, {
       onSuccess: () => {
         bottomSheetModalRef.current?.close();
+      },
+    });
+  };
+
+  // profile
+  const handleSaveModify = () => {
+    modifyUsername(editUsername, {
+      onSuccess: () => {
+        setEnableEdit(false);
       },
     });
   };
@@ -140,7 +150,7 @@ export const UserProfileScreen = () => {
                     취소
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleSaveModify}>
                   <Text fontSize={'$md'} fontWeight="700" color="$secondary700">
                     저장
                   </Text>

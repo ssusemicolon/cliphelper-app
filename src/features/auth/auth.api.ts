@@ -11,7 +11,6 @@ export const authAxios = axios.create({
 });
 
 export const login = async ({ type, key }: LoginForm) => {
-  console.log('login api: ', type, ' ', key?.substring(0, 10));
   const { data } = await publicAxios.post<SignInResponse>('/auth/login', {
     type,
     key,
@@ -20,7 +19,6 @@ export const login = async ({ type, key }: LoginForm) => {
 };
 
 export const reissueToken = async (refreshToken: string) => {
-  console.log('reissue api: ', refreshToken.substring(0, 10));
   const { data } = await authAxios.post<SignInResponse>('/auth/reissue', {
     refreshToken,
   });
