@@ -1,8 +1,16 @@
-import { ButtonIcon, EditIcon, HStack, Text } from '@gluestack-ui/themed';
+import {
+  ButtonIcon,
+  EditIcon,
+  HStack,
+  Text,
+  VStack,
+} from '@gluestack-ui/themed';
 import { useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import ArticleDetail from '~/components/ArticleDetail';
+import ErrorView from '~/components/ErrorView';
 import Header from '~/components/Header';
+import { GrowingLoadingView } from '~/components/Loading/GrowingLoadingView';
 import SafeView from '~/components/SafeView';
 import {
   useArticleDetail,
@@ -18,7 +26,7 @@ export const ArticleDetailScreen = ({
   navigation,
 }: ArticleStackScreenProps<'Detail'>) => {
   const { id } = route.params;
-  const { data } = useArticleDetail(id);
+  const { data, isLoading, error } = useArticleDetail(id);
   const { mutate: modify } = useArticleModifyMutation(id);
   const { mutate: remove } = useArticleRemoveMutation();
   const [editable, setEditable] = useState(false);
@@ -36,8 +44,26 @@ export const ArticleDetailScreen = ({
     init();
   }, [init]);
 
-  if (!data) {
-    return <Text>Loading...</Text>;
+  if (isLoading) {
+    return (
+      <SafeView top bottom>
+        <Header />
+        <VStack justifyContent="center" alignItems="center" flex={1}>
+          <GrowingLoadingView />
+        </VStack>
+      </SafeView>
+    );
+  }
+
+  if (!data || error) {
+    return (
+      <SafeView top bottom>
+        <Header />
+        <VStack justifyContent="center" alignItems="center" flex={1}>
+          <ErrorView />
+        </VStack>
+      </SafeView>
+    );
   }
 
   const combinedArticle = { ...data, ...articleForm };
