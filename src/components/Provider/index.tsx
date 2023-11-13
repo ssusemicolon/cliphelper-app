@@ -21,12 +21,80 @@ const client = new QueryClient({
   },
 });
 
+const linking = {
+  prefixes: ['cliphelper://'],
+  config: {
+    screens: {
+      // Auth
+      Auth: {
+        screens: {
+          SignIn: {
+            path: 'auth/signin',
+          },
+        },
+      },
+
+      // Article
+      Article: {
+        screens: {
+          List: {
+            path: 'article/list',
+          },
+          Detail: {
+            path: 'article/detail/:id',
+          },
+        },
+      },
+
+      // Collection
+      Collection: {
+        screens: {
+          List: {
+            path: 'collection/list',
+          },
+          Detail: {
+            path: 'collection/detail/:id',
+          },
+        },
+      },
+
+      // Article
+      Main: {
+        screens: {
+          Home: {
+            path: 'main/home',
+          },
+          Search: {
+            path: 'main/search',
+          },
+          Form: {
+            path: 'main/form',
+          },
+          Collections: {
+            screens: {
+              My: {
+                path: 'main/collections/my',
+              },
+              Bookmark: {
+                path: 'main/collections/bookmark',
+              },
+            },
+          },
+          Profile: {
+            path: 'main/profile',
+          },
+        },
+      },
+    },
+  },
+};
+
 const AppProvider = ({ children }: PropsWithChildren) => {
   return (
     <PersistProvider>
       <QueryClientProvider client={client}>
         <ThemeProvider>
-          <NavigationContainer>
+          <NavigationContainer linking={linking}>
             <SafeAreaProvider initialMetrics={initialWindowMetrics}>
               <GestureHandlerRootView style={{ flex: 1 }}>
                 <BottomSheetModalProvider>{children}</BottomSheetModalProvider>

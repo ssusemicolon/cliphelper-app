@@ -21,7 +21,7 @@ type ReducersState = ReturnType<typeof rootReducer>;
 const persistConfig: PersistConfig<ReducersState> = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: [],
+  whitelist: ['fcm'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

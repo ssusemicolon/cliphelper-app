@@ -23,7 +23,7 @@ const Stack = createNativeStackNavigator<ArticleStackParamList>();
 
 export const ArticleStackNavigator = () => {
   return (
-    <SafeView bottom>
+    <SafeView bottom top>
       <Stack.Navigator
         id="Article"
         screenOptions={{

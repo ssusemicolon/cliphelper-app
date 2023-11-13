@@ -1,15 +1,23 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+type AuthStoreType = {
+  isSigned: boolean;
+  userId: number;
+};
+
 const initialState = {
   isSigned: false,
+  userId: 0,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setSigned: (state, action: PayloadAction<boolean>) => {
-      state.isSigned = action.payload;
+    setSigned: (state, action: PayloadAction<AuthStoreType>) => {
+      const { isSigned, userId } = action.payload;
+      state.isSigned = isSigned;
+      state.userId = userId;
     },
   },
 });

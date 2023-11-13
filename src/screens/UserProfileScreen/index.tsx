@@ -169,7 +169,7 @@ export const UserProfileScreen = () => {
               borderRadius={80}
               source={
                 picture
-                  ? { uri: picture?.replace('http', 'https') }
+                  ? { uri: picture }
                   : require('~/assets/images/default_profile.png')
               }
               alt="user thumbnail image"

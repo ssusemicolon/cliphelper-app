@@ -16,10 +16,10 @@ import BottomTabBar from '~/components/BottomTabBar';
 import SafeView from '~/components/SafeView';
 import ArticleFormScreen from '~/screens/ArticleFormScreen';
 import { ArticleListScreen } from '~/screens/ArticleListScreen';
+import { PopularCollectionListScreen } from '~/screens/CollectionListScreen/PopularCollectionListScreen';
+import { UserProfileScreen } from '~/screens/UserProfileScreen';
 import { CollectionTopTabNavigator } from '../CollectionTopNavigator';
 import { RootStackParamList } from '../RootStackNavigator';
-import { UserProfileScreen } from '~/screens/UserProfileScreen';
-import { PopularCollectionListScreen } from '~/screens/CollectionListScreen/PopularCollectionListScreen';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 

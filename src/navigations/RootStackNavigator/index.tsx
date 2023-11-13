@@ -5,11 +5,8 @@ import {
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
-import {
-  useConfigAuthAxios,
-  useTokenService,
-} from '~/features/auth/auth.hooks';
-import { useAppSelector } from '~/store';
+import { useTokenService } from '~/features/auth/auth.hooks';
+import { useAppDispatch, useAppSelector } from '~/store';
 import {
   ArticleStackNavigator,
   ArticleStackParamList,
@@ -20,6 +17,9 @@ import {
   CollectionStackParamList,
 } from '../CollectionStackNavigator';
 import { MainTabNavigator, MainTabParamList } from '../MainTabNavigator';
+import { authActions } from '~/store/slices/authSlice';
+import { revealUserId } from '~/utils/revealUserId';
+import { useConfigAuthAxios } from '~/features/auth/auth.config';
 
 export type RootStackParamList = {
   Welcome: undefined;
@@ -40,18 +40,24 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootStackNavigator = () => {
   const { isSigned } = useAppSelector((state) => state.auth);
-
-  const configAxios = useConfigAuthAxios();
+  const dispatch = useAppDispatch();
   const { getToken } = useTokenService();
+  const { axiosConfiguration } = useConfigAuthAxios();
 
   useEffect(() => {
     const checkToken = async () => {
+      await axiosConfiguration();
       const { accessToken } = await getToken();
-      await configAxios();
       console.log('check token: ', accessToken);
+      dispatch(
+        authActions.setSigned({
+          isSigned: !!accessToken,
+          userId: accessToken ? revealUserId(accessToken) : 0,
+        }),
+      );
     };
     checkToken();
-  }, [configAxios, getToken, isSigned]);
+  }, [axiosConfiguration, dispatch, getToken]);
 
   return (
     <Stack.Navigator

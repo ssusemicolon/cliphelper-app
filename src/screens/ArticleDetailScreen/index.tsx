@@ -46,7 +46,7 @@ export const ArticleDetailScreen = ({
 
   if (isLoading) {
     return (
-      <SafeView top bottom>
+      <SafeView>
         <Header />
         <VStack justifyContent="center" alignItems="center" flex={1}>
           <GrowingLoadingView />
@@ -57,7 +57,7 @@ export const ArticleDetailScreen = ({
 
   if (!data || error) {
     return (
-      <SafeView top bottom>
+      <SafeView>
         <Header />
         <VStack justifyContent="center" alignItems="center" flex={1}>
           <ErrorView />
@@ -94,7 +94,7 @@ export const ArticleDetailScreen = ({
   };
 
   return (
-    <SafeView top>
+    <SafeView>
       <Header
         showTitle={false}
         right={

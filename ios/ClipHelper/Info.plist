@@ -40,6 +40,16 @@
 				<string>com.googleusercontent.apps.161501675331-h49mb23vej7lm5hvg3tgio8do8smeirr</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>cliphelper</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>cliphelper</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
