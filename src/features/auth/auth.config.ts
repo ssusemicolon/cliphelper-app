@@ -15,13 +15,13 @@ const getTokenExpireTime = (accessToken: string) => {
   if (cached) {
     return cached;
   }
-  tokenExpireCache[accessToken] = jwtDecode(accessToken).exp || 0;
+  tokenExpireCache[accessToken] = jwtDecode(accessToken).exp || 0 * 1000;
   return tokenExpireCache[accessToken];
 };
 
 const isExpired = (accessToken: string) => {
-  const nowDate = new Date().getTime() / 1000;
-  return getTokenExpireTime(accessToken) < nowDate;
+  const nowDate = new Date().getTime();
+  return getTokenExpireTime(accessToken) < nowDate - 1000;
 };
 
 /** axios */
@@ -30,15 +30,11 @@ export const useConfigAuthAxios = () => {
   const { mutate: logoutMutation } = useLogoutMutation();
   const counter = useRef<number>(1);
 
-  const resetCounter = () =>
-    setTimeout(() => {
-      counter.current = 1;
-    }, 500);
+  const resetCounter = () => (counter.current = 1);
 
   const checkToken = useCallback(
     async (config: any) => {
       const { accessToken, refreshToken } = await getToken();
-      console.log('check token');
 
       if (!accessToken) {
         return config;
@@ -48,9 +44,7 @@ export const useConfigAuthAxios = () => {
         counter.current = 0;
 
         try {
-          console.log('reissue!');
           const newToken = await reissueTokenApi(accessToken, refreshToken);
-          console.log('end: reissue');
           if (newToken) {
             setAccessTokenInAxiosHeaders(newToken.accessToken);
             if (config.headers) {
@@ -58,11 +52,11 @@ export const useConfigAuthAxios = () => {
             }
             await setToken(newToken.accessToken, newToken.refreshToken);
           }
-          resetCounter();
         } catch (error) {
           console.log('failed to refresh token: ', error);
-          resetCounter();
           logoutMutation();
+        } finally {
+          setTimeout(resetCounter, 300);
         }
       }
 
