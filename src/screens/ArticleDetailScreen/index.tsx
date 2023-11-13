@@ -31,6 +31,7 @@ export const ArticleDetailScreen = ({
   const { mutate: remove } = useArticleRemoveMutation();
   const [editable, setEditable] = useState(false);
   const articleForm = useAppSelector((state) => state.articleForm);
+  const { userId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const init = useCallback(() => {
@@ -98,23 +99,27 @@ export const ArticleDetailScreen = ({
       <Header
         showTitle={false}
         right={
-          editable ? (
-            <HStack gap={30}>
-              <TouchableOpacity onPress={onCancel}>
-                <Text color="$focus400" fontWeight="700">
-                  취소
-                </Text>
+          userId === combinedArticle.userId ? (
+            editable ? (
+              <HStack gap={30}>
+                <TouchableOpacity onPress={onCancel}>
+                  <Text color="$focus400" fontWeight="700">
+                    취소
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={onSave}>
+                  <Text color="$primary900" fontWeight="700">
+                    저장
+                  </Text>
+                </TouchableOpacity>
+              </HStack>
+            ) : (
+              <TouchableOpacity onPress={() => setEditable(!editable)}>
+                <ButtonIcon size="xl" color="$primary900" as={EditIcon} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={onSave}>
-                <Text color="$primary900" fontWeight="700">
-                  저장
-                </Text>
-              </TouchableOpacity>
-            </HStack>
+            )
           ) : (
-            <TouchableOpacity onPress={() => setEditable(!editable)}>
-              <ButtonIcon size="xl" color="$primary900" as={EditIcon} />
-            </TouchableOpacity>
+            <></>
           )
         }
       />

@@ -16,12 +16,14 @@ import {
   useCollectionRemoveMutation,
 } from '~/features/collection/collection.hooks';
 import { CollectionStackScreenProps } from '~/navigations/CollectionStackNavigator';
+import { useAppSelector } from '~/store';
 
 export const CollectionDetailScreen = ({
   route,
   navigation,
 }: CollectionStackScreenProps<'Detail'>) => {
   const { id } = route.params;
+  const { userId } = useAppSelector((state) => state.auth);
   const { data } = useCollectionDetail(id);
   const { mutate: modifyCollection } = useCollectionModifyMutation(id);
   const { mutate: removeCollection } = useCollectionRemoveMutation();
@@ -79,22 +81,26 @@ export const CollectionDetailScreen = ({
         showTitle={false}
         height={'auto'}
         right={
-          <HStack gap={20}>
-            <TouchableOpacity onPress={onRemove}>
-              <ButtonIcon size="xl" color="$focus400" as={TrashIcon} />
-            </TouchableOpacity>
-            {editable ? (
-              <TouchableOpacity onPress={onSave}>
-                <Text color="$primary900" fontWeight="700">
-                  완료
-                </Text>
+          userId === combinedData.user?.userId ? (
+            <HStack gap={20}>
+              <TouchableOpacity onPress={onRemove}>
+                <ButtonIcon size="xl" color="$focus400" as={TrashIcon} />
               </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={() => setEditable(true)}>
-                <ButtonIcon size="xl" color="$primary900" as={EditIcon} />
-              </TouchableOpacity>
-            )}
-          </HStack>
+              {editable ? (
+                <TouchableOpacity onPress={onSave}>
+                  <Text color="$primary900" fontWeight="700">
+                    완료
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={() => setEditable(true)}>
+                  <ButtonIcon size="xl" color="$primary900" as={EditIcon} />
+                </TouchableOpacity>
+              )}
+            </HStack>
+          ) : (
+            <></>
+          )
         }
       />
       <CollectionDetail

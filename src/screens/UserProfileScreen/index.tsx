@@ -25,6 +25,7 @@ import {
   useUserProfile,
   useUsernameModifyMutation,
 } from '~/features/user/user.hooks';
+import { useAppSelector } from '~/store';
 import { colors } from '~/theme';
 
 const UserTextArea = styled(TextInput)`
@@ -41,6 +42,8 @@ const UserTextArea = styled(TextInput)`
  *
  */
 export const UserProfileScreen = () => {
+  const { userId: currentUserId } = useAppSelector((state) => state.auth);
+
   // profile
   const { data: user } = useUserProfile();
   const [enableEdit, setEnableEdit] = useState(false);
@@ -125,6 +128,7 @@ export const UserProfileScreen = () => {
   }
 
   const {
+    userId,
     email,
     username,
     picture,
@@ -139,27 +143,35 @@ export const UserProfileScreen = () => {
       <ScrollView>
         <VStack bgColor="$primary900" paddingBottom={25}>
           <HStack justifyContent="flex-end" padding={10}>
-            {enableEdit ? (
-              <HStack alignItems="center" justifyContent="center" gap={20}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setEnableEdit(false);
-                  }}
-                >
-                  <Text fontSize={'$md'} fontWeight="700" color="$focus300">
-                    취소
-                  </Text>
+            {userId === currentUserId ? (
+              enableEdit ? (
+                <HStack alignItems="center" justifyContent="center" gap={20}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setEnableEdit(false);
+                    }}
+                  >
+                    <Text fontSize={'$md'} fontWeight="700" color="$focus300">
+                      취소
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleSaveModify}>
+                    <Text
+                      fontSize={'$md'}
+                      fontWeight="700"
+                      color="$secondary700"
+                    >
+                      저장
+                    </Text>
+                  </TouchableOpacity>
+                </HStack>
+              ) : (
+                <TouchableOpacity onPress={() => setEnableEdit(true)}>
+                  <ButtonIcon size="xl" color="$grey100" as={EditIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleSaveModify}>
-                  <Text fontSize={'$md'} fontWeight="700" color="$secondary700">
-                    저장
-                  </Text>
-                </TouchableOpacity>
-              </HStack>
+              )
             ) : (
-              <TouchableOpacity onPress={() => setEnableEdit(true)}>
-                <ButtonIcon size="xl" color="$grey100" as={EditIcon} />
-              </TouchableOpacity>
+              <></>
             )}
           </HStack>
           <VStack alignItems="center" gap={12} flex={1}>
