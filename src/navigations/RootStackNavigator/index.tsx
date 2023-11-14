@@ -5,8 +5,11 @@ import {
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
+import { useConfigAuthAxios } from '~/features/auth/auth.config';
 import { useTokenService } from '~/features/auth/auth.hooks';
 import { useAppDispatch, useAppSelector } from '~/store';
+import { authActions } from '~/store/slices/authSlice';
+import { revealUserId } from '~/utils/revealUserId';
 import {
   ArticleStackNavigator,
   ArticleStackParamList,
@@ -17,9 +20,6 @@ import {
   CollectionStackParamList,
 } from '../CollectionStackNavigator';
 import { MainTabNavigator, MainTabParamList } from '../MainTabNavigator';
-import { authActions } from '~/store/slices/authSlice';
-import { revealUserId } from '~/utils/revealUserId';
-import { useConfigAuthAxios } from '~/features/auth/auth.config';
 
 export type RootStackParamList = {
   Welcome: undefined;

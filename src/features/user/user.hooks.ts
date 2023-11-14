@@ -9,6 +9,7 @@ import {
   removeAlarm,
 } from './user.api';
 import { collectionKeys } from '../collection/collection.hooks';
+import { errorHandler } from '~/utils/errorHandler';
 
 export const userKeys = {
   all: 'user',
@@ -29,6 +30,7 @@ export const useUsernameModifyMutation = () => {
       queryClient.invalidateQueries(userKeys.profile());
       queryClient.invalidateQueries(collectionKeys.list());
     },
+    onError: errorHandler,
   });
 };
 
@@ -44,6 +46,7 @@ export const useEnableAlarmMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.profile());
     },
+    onError: errorHandler,
   });
 };
 
@@ -54,6 +57,7 @@ export const useAppendAlarmMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.alarm());
     },
+    onError: errorHandler,
   });
 };
 
@@ -64,6 +68,7 @@ export const useRemoveAlarmMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.alarm());
     },
+    onError: errorHandler,
   });
 };
 
@@ -74,5 +79,6 @@ export const useModifyAlarmMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.alarm());
     },
+    onError: errorHandler,
   });
 };

@@ -38,9 +38,6 @@ const CollectionItem = ({
       >
         {user && <UserProfile user={user} />}
         <HStack space="lg" paddingHorizontal={10} paddingVertical={5}>
-          {isPublic
-            ? !user && <EarthIcon color="$primary900" size="xl" />
-            : !user && <LockIcon color="$primary900" size="xl" />}
           <VStack flex={1} gap={10}>
             <HStack justifyContent="space-between">
               {editable ? (
@@ -56,9 +53,16 @@ const CollectionItem = ({
                   />
                 </VStack>
               ) : (
-                <Text fontWeight="700" fontSize={'$lg'}>
-                  {title}
-                </Text>
+                <HStack justifyContent="center" gap={10}>
+                  {isPublic ? (
+                    <EarthIcon color="$primary900" size="xl" />
+                  ) : (
+                    <LockIcon color="$primary900" size="xl" />
+                  )}
+                  <Text fontWeight="700" fontSize={'$lg'}>
+                    {title}
+                  </Text>
+                </HStack>
               )}
               {isPublic && !editable && (
                 <HStack gap={5} alignItems="center">

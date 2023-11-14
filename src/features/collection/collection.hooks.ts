@@ -7,6 +7,7 @@ import {
   modifyCollection,
   removeCollection,
 } from './collection.api';
+import { errorHandler } from '~/utils/errorHandler';
 
 export const collectionKeys = {
   all: 'collection',
@@ -37,6 +38,7 @@ export const useCollectionAppendMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(collectionKeys.list());
     },
+    onError: errorHandler,
   });
 };
 
@@ -48,6 +50,7 @@ export const useCollectionModifyMutation = (collectionId: number) => {
       queryClient.invalidateQueries(collectionKeys.list());
       queryClient.invalidateQueries(collectionKeys.detail(collectionId));
     },
+    onError: errorHandler,
   });
 };
 
@@ -58,5 +61,6 @@ export const useCollectionRemoveMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(collectionKeys.list());
     },
+    onError: errorHandler,
   });
 };

@@ -47,6 +47,7 @@
     "react-native-screens": "^3.25.0",
     "react-native-svg": "13.4.0",
     "react-native-tab-view": "^3.5.2",
+    "react-native-toast-message": "^2.1.7",
     "react-native-webview": "^13.6.2",
     "react-native-wheely": "^0.6.0",
     "react-redux": "^8.1.3",

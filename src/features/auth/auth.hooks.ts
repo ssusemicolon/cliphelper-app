@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 import * as KeyChain from 'react-native-keychain';
 import { useAppDispatch } from '~/store';
 import { authActions } from '~/store/slices/authSlice';
 import { login, logout } from './auth.api';
 
+import { errorHandler } from '~/utils/errorHandler';
 import { setAccessTokenInAxiosHeaders } from './auth.config';
 
 type token = {
@@ -24,6 +24,7 @@ export const useLoginMutation = () => {
       setAccessTokenInAxiosHeaders(accessToken);
       dispatch(authActions.setSigned({ isSigned: true, userId }));
     },
+    onError: errorHandler,
   });
 };
 
@@ -42,12 +43,7 @@ export const useLogoutMutation = () => {
         await resetToken();
         dispatch(authActions.setSigned({ isSigned: false, userId: 0 }));
       },
-      onError: (e) => {
-        console.log('error: ', e);
-        if (isAxiosError(e)) {
-          console.log('error: ', e.response?.data);
-        }
-      },
+      onError: errorHandler,
     },
   );
 };
