@@ -20,6 +20,7 @@ import {
   CollectionStackParamList,
 } from '../CollectionStackNavigator';
 import { MainTabNavigator, MainTabParamList } from '../MainTabNavigator';
+import { MyWebView } from '~/containers/MyWebView';
 
 export type RootStackParamList = {
   Welcome: undefined;
@@ -27,6 +28,9 @@ export type RootStackParamList = {
   Article: NavigatorScreenParams<ArticleStackParamList>;
   Collection: NavigatorScreenParams<CollectionStackParamList>;
   Main: NavigatorScreenParams<MainTabParamList>;
+  WebView: {
+    uri: string;
+  };
   Auth: undefined;
 };
 
@@ -74,6 +78,7 @@ export const RootStackNavigator = () => {
             name="Collection"
             component={CollectionStackNavigator}
           />
+          <Stack.Screen name="WebView" component={MyWebView} />
         </>
       ) : (
         <Stack.Screen name="Auth" component={AuthStackNavigator} />

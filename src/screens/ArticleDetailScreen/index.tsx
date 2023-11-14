@@ -5,6 +5,7 @@ import {
   Text,
   VStack,
 } from '@gluestack-ui/themed';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import ArticleDetail from '~/components/ArticleDetail';
@@ -18,14 +19,15 @@ import {
   useArticleRemoveMutation,
 } from '~/features/article/article.hooks';
 import { ArticleStackScreenProps } from '~/navigations/ArticleStackNavigator';
+import { RootStackParamList } from '~/navigations/RootStackNavigator';
 import { useAppDispatch, useAppSelector } from '~/store';
 import { articleFormActions } from '~/store/slices/articleForm';
 
 export const ArticleDetailScreen = ({
   route,
-  navigation,
 }: ArticleStackScreenProps<'Detail'>) => {
   const { id } = route.params;
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { data, isLoading, error } = useArticleDetail(id);
   const { mutate: modify } = useArticleModifyMutation(id);
   const { mutate: remove } = useArticleRemoveMutation();
@@ -78,7 +80,9 @@ export const ArticleDetailScreen = ({
   };
 
   const onLink = () => {
-    console.log('clicked');
+    navigation.navigate('WebView', {
+      uri: combinedArticle.url,
+    });
   };
 
   const onCancel = () => {
