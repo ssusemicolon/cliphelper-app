@@ -1,6 +1,7 @@
 interface ArticleListItem {
   articleId: number;
   url?: string;
+  fileUrl?: string;
   thumbnail?: string;
   title: string;
   description: string;

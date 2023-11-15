@@ -1,4 +1,4 @@
-import ArticleForm from '~/components/ArticleForm';
+import ArticleForm from '~/containers/ArticleForm';
 import SafeView from '~/components/SafeView';
 import { MainTabScreenProps } from '~/navigations/MainTabNavigator';
 

@@ -2,10 +2,11 @@ import { HStack, ScrollView, Text, VStack } from '@gluestack-ui/themed';
 import { useRef, useState } from 'react';
 import { parseSite } from '~/utils/parseSite';
 import useDebounce from '~/utils/useDebounce';
-import { ArticleTextArea } from '../ArticleDetail/ArticleTextArea';
-import CTAButton from '../CTAButton';
-import Tags from '../Tags';
+import { ArticleTextArea } from '../../components/ArticleDetail/ArticleTextArea';
+import CTAButton from '../../components/CTAButton';
+import Tags from '../../components/Tags';
 import { useArticleAppendMutation } from '~/features/article/article.hooks';
+import { FileType, UploadHelper } from '~/components/UploadHelper';
 
 type ArticleFormProps = {
   onSuccess?: () => void;
@@ -18,10 +19,12 @@ const ArticleForm = ({ onSuccess }: ArticleFormProps) => {
   const thumbnail = useRef<string>('');
   const [memoContent, setMemoContent] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
+  const [file, setFile] = useState<FileType[]>([]);
 
   const { mutate: saveArticle } = useArticleAppendMutation();
 
   const handleSave = () => {
+    console.log('file[0]: ', typeof file[0]);
     saveArticle(
       {
         url,
@@ -30,7 +33,7 @@ const ArticleForm = ({ onSuccess }: ArticleFormProps) => {
         thumbnail: thumbnail?.current,
         description: description?.current,
         tags,
-        file: null,
+        file: file[0],
       },
       {
         onSuccess: () => {
@@ -48,6 +51,7 @@ const ArticleForm = ({ onSuccess }: ArticleFormProps) => {
     thumbnail.current = '';
     setMemoContent('');
     setTags([]);
+    setFile([]);
   };
 
   const onChangeUrl = (t: string) => {
@@ -133,6 +137,10 @@ const ArticleForm = ({ onSuccess }: ArticleFormProps) => {
                 파일
               </Text>
             </HStack>
+            <UploadHelper onPickFile={(files) => setFile(files)}>
+              <Text>파일선택</Text>
+            </UploadHelper>
+            <Text>{file.length > 0 && file[0].name}</Text>
           </VStack>
         </VStack>
       </ScrollView>

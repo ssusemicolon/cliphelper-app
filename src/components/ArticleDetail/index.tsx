@@ -1,7 +1,8 @@
-import { HStack, ScrollView, Text, VStack } from '@gluestack-ui/themed';
+import { HStack, Image, ScrollView, Text, VStack } from '@gluestack-ui/themed';
 import { useAppDispatch } from '~/store';
 import { articleFormActions } from '~/store/slices/articleForm';
 import { fromNow } from '~/utils/date-formatter';
+import { isImageUrl } from '~/utils/isImageUrl';
 import CTAButton from '../CTAButton';
 import ArticleThumb from '../Image/ArticleThumb';
 import Tags from '../Tags';
@@ -26,6 +27,7 @@ const ArticleDetail = (prop: ArticleDetailProp) => {
     onDelete,
     onLink,
     editable,
+    fileUrl,
   } = prop;
 
   const dispatch = useAppDispatch();
@@ -75,6 +77,12 @@ const ArticleDetail = (prop: ArticleDetailProp) => {
               onChangeText={onChangeMemo}
               placeholder="공부한 내용을 메모해보세요.."
             />
+          </VStack>
+
+          <VStack>
+            {isImageUrl(fileUrl) && (
+              <Image source={{ uri: fileUrl }} alt="uploaded image" />
+            )}
           </VStack>
         </VStack>
       </ScrollView>

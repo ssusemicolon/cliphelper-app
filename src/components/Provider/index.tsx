@@ -10,6 +10,7 @@ import {
 import { ThemeProvider } from '~/theme';
 import PersistProvider from '../../store/PersistProvider';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import NativeUploady from '@rpldy/native-uploady';
 
 const client = new QueryClient({
   defaultOptions: {
@@ -97,7 +98,11 @@ const AppProvider = ({ children }: PropsWithChildren) => {
           <NavigationContainer linking={linking}>
             <SafeAreaProvider initialMetrics={initialWindowMetrics}>
               <GestureHandlerRootView style={{ flex: 1 }}>
-                <BottomSheetModalProvider>{children}</BottomSheetModalProvider>
+                <NativeUploady>
+                  <BottomSheetModalProvider>
+                    {children}
+                  </BottomSheetModalProvider>
+                </NativeUploady>
               </GestureHandlerRootView>
             </SafeAreaProvider>
           </NavigationContainer>

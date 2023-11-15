@@ -24,6 +24,7 @@ import { RootStackParamList } from '../RootStackNavigator';
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export type MainTabParamList = {
+  Test: undefined;
   Home: undefined;
   Search: undefined;
   Form: undefined;
@@ -48,7 +49,6 @@ export const MainTabNavigator = () => {
     <SafeView top bottom>
       <Tab.Navigator
         id="Main"
-        initialRouteName="Home"
         tabBar={BottomTabBar}
         screenOptions={{
           headerShown: false,
