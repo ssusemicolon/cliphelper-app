@@ -35,12 +35,14 @@ export const modifyArticleCollection = async ({
 };
 
 export const appendArticle = async (form: ArticleAppendForm) => {
-  const data = await authAxios.post('/articles', form, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+  const formData = new FormData();
+  Object.entries(form).forEach(([key, value]) => {
+    if (value === undefined) {
+      return;
+    }
+    formData.append(key, value);
   });
-
+  const data = await authAxios.post('/articles', formData);
   return data.data;
 };
 

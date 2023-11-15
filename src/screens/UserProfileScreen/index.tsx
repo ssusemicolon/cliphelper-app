@@ -1,4 +1,5 @@
 import {
+  Box,
   ButtonIcon,
   EditIcon,
   HStack,
@@ -15,15 +16,18 @@ import styled from 'styled-components';
 import { RoundedPlusIcon } from '~/components/Icon/PlusIcon';
 import SafeView from '~/components/SafeView';
 import TimeSelector from '~/components/TimeSelector';
+import { FileType, UploadHelper } from '~/components/UploadHelper';
 import { useLogoutMutation } from '~/features/auth/auth.hooks';
 import {
   useAlarm,
   useAppendAlarmMutation,
   useEnableAlarmMutation,
   useModifyAlarmMutation,
+  useProfileModifyMutation,
   useRemoveAlarmMutation,
   useUserProfile,
 } from '~/features/user/user.hooks';
+import { useAppSelector } from '~/store';
 import { colors } from '~/theme';
 
 const UserTextArea = styled(TextInput)`
@@ -40,10 +44,14 @@ const UserTextArea = styled(TextInput)`
  *
  */
 export const UserProfileScreen = () => {
+  const { userId: currentUserId } = useAppSelector((state) => state.auth);
+
   // profile
   const { data: user } = useUserProfile();
   const [enableEdit, setEnableEdit] = useState(false);
   const [editUsername, setEditUsername] = useState('');
+  const { mutate: modifyProfile } = useProfileModifyMutation();
+  const [selectedFile, setFile] = useState<FileType>();
 
   // alarm
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -60,9 +68,8 @@ export const UserProfileScreen = () => {
 
   const snapPoints = useMemo(() => ['50%'], []);
 
-  console.log('user: rendering');
-
   // callbacks
+  // alarm
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
@@ -103,6 +110,19 @@ export const UserProfileScreen = () => {
     });
   };
 
+  // profile
+  const handleModifySave = () => {
+    modifyProfile(
+      { username: editUsername, picture: selectedFile },
+      {
+        onSuccess: () => {
+          setEnableEdit(false);
+          setFile(undefined);
+        },
+      },
+    );
+  };
+
   useEffect(() => {
     if (!user) {
       return;
@@ -115,6 +135,7 @@ export const UserProfileScreen = () => {
   }
 
   const {
+    userId,
     email,
     username,
     picture,
@@ -129,41 +150,75 @@ export const UserProfileScreen = () => {
       <ScrollView>
         <VStack bgColor="$primary900" paddingBottom={25}>
           <HStack justifyContent="flex-end" padding={10}>
-            {enableEdit ? (
-              <HStack alignItems="center" justifyContent="center" gap={20}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setEnableEdit(false);
-                  }}
-                >
-                  <Text fontSize={'$md'} fontWeight="700" color="$focus300">
-                    취소
-                  </Text>
+            {userId === currentUserId ? (
+              enableEdit ? (
+                <HStack alignItems="center" justifyContent="center" gap={20}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setEnableEdit(false);
+                    }}
+                  >
+                    <Text fontSize={'$md'} fontWeight="700" color="$focus300">
+                      취소
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleModifySave}>
+                    <Text
+                      fontSize={'$md'}
+                      fontWeight="700"
+                      color="$secondary700"
+                    >
+                      저장
+                    </Text>
+                  </TouchableOpacity>
+                </HStack>
+              ) : (
+                <TouchableOpacity onPress={() => setEnableEdit(true)}>
+                  <ButtonIcon size="xl" color="$grey100" as={EditIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity>
-                  <Text fontSize={'$md'} fontWeight="700" color="$secondary700">
-                    저장
-                  </Text>
-                </TouchableOpacity>
-              </HStack>
+              )
             ) : (
-              <TouchableOpacity onPress={() => setEnableEdit(true)}>
-                <ButtonIcon size="xl" color="$grey100" as={EditIcon} />
-              </TouchableOpacity>
+              <></>
             )}
           </HStack>
           <VStack alignItems="center" gap={12} flex={1}>
-            <Image
-              width={150}
-              height={150}
+            <Box
+              borderWidth={enableEdit ? 4 : 0}
               borderRadius={80}
-              source={
-                picture
-                  ? { uri: picture?.replace('http', 'https') }
-                  : require('~/assets/images/default_profile.png')
-              }
-              alt="user thumbnail image"
-            />
+              padding={3}
+              borderColor="$grey100"
+            >
+              {enableEdit ? (
+                <UploadHelper onPickFile={(files) => setFile(files[0])}>
+                  <Image
+                    width={150}
+                    height={150}
+                    borderRadius={80}
+                    source={
+                      selectedFile?.uri
+                        ? { uri: selectedFile?.uri }
+                        : picture
+                        ? { uri: picture }
+                        : require('~/assets/images/default_profile.png')
+                    }
+                    alt="user thumbnail image"
+                  />
+                </UploadHelper>
+              ) : (
+                <Image
+                  width={150}
+                  height={150}
+                  borderRadius={80}
+                  source={
+                    picture
+                      ? { uri: picture }
+                      : require('~/assets/images/default_profile.png')
+                  }
+                  alt="user thumbnail image"
+                />
+              )}
+            </Box>
+
             <VStack alignItems="center" width={'100%'} gap={10}>
               <Text fontWeight="700" fontSize={'$lg'} color="$grey100">
                 {email}

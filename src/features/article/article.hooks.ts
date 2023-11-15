@@ -1,4 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { errorHandler } from '~/utils/errorHandler';
+import { collectionKeys } from '../collection/collection.hooks';
 import {
   appendArticle,
   fetchArticleCollections,
@@ -8,7 +10,6 @@ import {
   modifyArticleCollection,
   removeArticle,
 } from './article.api';
-import { collectionKeys } from '../collection/collection.hooks';
 
 export const articleKeys = {
   all: 'article',
@@ -36,11 +37,13 @@ export const useArticleCollections = (id: number) => {
 
 export const useArticleCollectionMutation = (id: number) => {
   const queryClient = useQueryClient();
+
   return useMutation(modifyArticleCollection, {
     onSuccess: () => {
       queryClient.invalidateQueries(articleKeys.collection(id));
       queryClient.invalidateQueries(collectionKeys.list());
     },
+    onError: errorHandler,
   });
 };
 
@@ -51,6 +54,7 @@ export const useArticleAppendMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(articleKeys.list());
     },
+    onError: errorHandler,
   });
 };
 
@@ -61,6 +65,7 @@ export const useArticleModifyMutation = (id: number) => {
       queryClient.invalidateQueries(articleKeys.list());
       queryClient.invalidateQueries(articleKeys.detail(id));
     },
+    onError: errorHandler,
   });
 };
 
@@ -71,5 +76,6 @@ export const useArticleRemoveMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(articleKeys.list());
     },
+    onError: errorHandler,
   });
 };

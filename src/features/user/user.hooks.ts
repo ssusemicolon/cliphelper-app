@@ -1,10 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { errorHandler } from '~/utils/errorHandler';
+import { collectionKeys } from '../collection/collection.hooks';
 import {
   appendAlarm,
   enableAlarm,
   fetchUserAlarm,
   fetchUserProfile,
   modifyAlarm,
+  modifyProfile,
   removeAlarm,
 } from './user.api';
 
@@ -19,6 +22,18 @@ export const useUserProfile = () => {
   return useQuery(userKeys.profile(), () => fetchUserProfile());
 };
 
+/** modify user name */
+export const useProfileModifyMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(modifyProfile, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(userKeys.profile());
+      queryClient.invalidateQueries(collectionKeys.list());
+    },
+    onError: errorHandler,
+  });
+};
+
 /** fetch alarm list */
 export const useAlarm = () => {
   return useQuery(userKeys.alarm(), () => fetchUserAlarm());
@@ -31,6 +46,7 @@ export const useEnableAlarmMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.profile());
     },
+    onError: errorHandler,
   });
 };
 
@@ -41,6 +57,7 @@ export const useAppendAlarmMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.alarm());
     },
+    onError: errorHandler,
   });
 };
 
@@ -51,6 +68,7 @@ export const useRemoveAlarmMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.alarm());
     },
+    onError: errorHandler,
   });
 };
 
@@ -61,5 +79,6 @@ export const useModifyAlarmMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.alarm());
     },
+    onError: errorHandler,
   });
 };

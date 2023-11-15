@@ -1,16 +1,18 @@
-import { HStack, Text } from '@gluestack-ui/themed';
+import { HStack, Text, VStack } from '@gluestack-ui/themed';
 import { BottomSheetModal, TouchableOpacity } from '@gorhom/bottom-sheet';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useCallback, useMemo, useRef } from 'react';
 import CollectionList from '~/components/CollectionList';
+import ErrorView from '~/components/ErrorView';
 import { RoundedPlusIcon } from '~/components/Icon/PlusIcon';
+import { GrowingLoadingView } from '~/components/Loading/GrowingLoadingView';
 import SafeView from '~/components/SafeView';
 import CollectionForm from '~/containers/CollectionForm';
 import { useCollectionList } from '~/features/collection/collection.hooks';
 import { RootStackParamList } from '~/navigations/RootStackNavigator';
 
 export const MyCollectionListScreen = () => {
-  const { data } = useCollectionList();
+  const { data, isLoading, error } = useCollectionList();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -22,8 +24,24 @@ export const MyCollectionListScreen = () => {
     bottomSheetModalRef.current?.present();
   }, []);
 
-  if (!data) {
-    return <Text>Loading...</Text>;
+  if (isLoading) {
+    return (
+      <SafeView>
+        <VStack justifyContent="center" alignItems="center" flex={1}>
+          <GrowingLoadingView />
+        </VStack>
+      </SafeView>
+    );
+  }
+
+  if (!data || error) {
+    return (
+      <SafeView>
+        <VStack justifyContent="center" alignItems="center" flex={1}>
+          <ErrorView />
+        </VStack>
+      </SafeView>
+    );
   }
 
   const onClick = (id: number) => {
@@ -48,7 +66,18 @@ export const MyCollectionListScreen = () => {
           <Text color="$primary900">새 컬렉션 추가</Text>
         </HStack>
       </TouchableOpacity>
-      <CollectionList collections={data} onClickItem={onClick} />
+      {data?.length > 0 ? (
+        <CollectionList collections={data} onClickItem={onClick} />
+      ) : (
+        <VStack justifyContent="center" alignItems="center">
+          <ErrorView
+            message={
+              '아직 만들어진 컬렉션이 없어요\n컬렉션을 만들고, 북마크를 관리해보세요!'
+            }
+            color="$focus200"
+          />
+        </VStack>
+      )}
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
