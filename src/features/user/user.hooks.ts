@@ -1,15 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { errorHandler } from '~/utils/errorHandler';
+import { collectionKeys } from '../collection/collection.hooks';
 import {
   appendAlarm,
   enableAlarm,
   fetchUserAlarm,
   fetchUserProfile,
   modifyAlarm,
-  modifyUsername,
+  modifyProfile,
   removeAlarm,
 } from './user.api';
-import { collectionKeys } from '../collection/collection.hooks';
-import { errorHandler } from '~/utils/errorHandler';
 
 export const userKeys = {
   all: 'user',
@@ -23,9 +23,9 @@ export const useUserProfile = () => {
 };
 
 /** modify user name */
-export const useUsernameModifyMutation = () => {
+export const useProfileModifyMutation = () => {
   const queryClient = useQueryClient();
-  return useMutation(modifyUsername, {
+  return useMutation(modifyProfile, {
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.profile());
       queryClient.invalidateQueries(collectionKeys.list());

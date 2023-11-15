@@ -1,3 +1,4 @@
+import { FileType } from '~/components/UploadHelper';
 import { authAxios } from '../auth/auth.api';
 
 /** 프로필 조회 */
@@ -7,11 +8,30 @@ export const fetchUserProfile = async () => {
   return data.data;
 };
 
-/** 닉네임 변경 */
-export const modifyUsername = async (username: string) => {
-  const { data } = await authAxios.patch<ResponseType<{}>>('/users/username', {
-    username,
+/** 프로필 변경 */
+export const modifyProfile = async (form: ProfileModifyRequestFormType) => {
+  const formData = new FormData();
+  Object.entries(form).forEach(([key, value]) => {
+    if (!value) {
+      return;
+    }
+    formData.append(key, value);
   });
+  const { data } = await authAxios.patch<ResponseType<{}>>(
+    '/users/profile',
+    formData,
+  );
+  return data.data;
+};
+
+export const modifyUserPicture = async (file: FileType) => {
+  const formData = new FormData();
+  formData.append('picture', file);
+
+  const { data } = await authAxios.patch<ResponseType<{}>>(
+    '/users/picture',
+    formData,
+  );
   return data.data;
 };
 

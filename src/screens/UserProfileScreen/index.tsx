@@ -1,4 +1,5 @@
 import {
+  Box,
   ButtonIcon,
   EditIcon,
   HStack,
@@ -15,15 +16,16 @@ import styled from 'styled-components';
 import { RoundedPlusIcon } from '~/components/Icon/PlusIcon';
 import SafeView from '~/components/SafeView';
 import TimeSelector from '~/components/TimeSelector';
+import { FileType, UploadHelper } from '~/components/UploadHelper';
 import { useLogoutMutation } from '~/features/auth/auth.hooks';
 import {
   useAlarm,
   useAppendAlarmMutation,
   useEnableAlarmMutation,
   useModifyAlarmMutation,
+  useProfileModifyMutation,
   useRemoveAlarmMutation,
   useUserProfile,
-  useUsernameModifyMutation,
 } from '~/features/user/user.hooks';
 import { useAppSelector } from '~/store';
 import { colors } from '~/theme';
@@ -48,7 +50,8 @@ export const UserProfileScreen = () => {
   const { data: user } = useUserProfile();
   const [enableEdit, setEnableEdit] = useState(false);
   const [editUsername, setEditUsername] = useState('');
-  const { mutate: modifyUsername } = useUsernameModifyMutation();
+  const { mutate: modifyProfile } = useProfileModifyMutation();
+  const [selectedFile, setFile] = useState<FileType>();
 
   // alarm
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -108,12 +111,16 @@ export const UserProfileScreen = () => {
   };
 
   // profile
-  const handleSaveModify = () => {
-    modifyUsername(editUsername, {
-      onSuccess: () => {
-        setEnableEdit(false);
+  const handleModifySave = () => {
+    modifyProfile(
+      { username: editUsername, picture: selectedFile },
+      {
+        onSuccess: () => {
+          setEnableEdit(false);
+          setFile(undefined);
+        },
       },
-    });
+    );
   };
 
   useEffect(() => {
@@ -155,7 +162,7 @@ export const UserProfileScreen = () => {
                       취소
                     </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={handleSaveModify}>
+                  <TouchableOpacity onPress={handleModifySave}>
                     <Text
                       fontSize={'$md'}
                       fontWeight="700"
@@ -175,17 +182,43 @@ export const UserProfileScreen = () => {
             )}
           </HStack>
           <VStack alignItems="center" gap={12} flex={1}>
-            <Image
-              width={150}
-              height={150}
+            <Box
+              borderWidth={enableEdit ? 4 : 0}
               borderRadius={80}
-              source={
-                picture
-                  ? { uri: picture }
-                  : require('~/assets/images/default_profile.png')
-              }
-              alt="user thumbnail image"
-            />
+              padding={3}
+              borderColor="$grey100"
+            >
+              {enableEdit ? (
+                <UploadHelper onPickFile={(files) => setFile(files[0])}>
+                  <Image
+                    width={150}
+                    height={150}
+                    borderRadius={80}
+                    source={
+                      selectedFile?.uri
+                        ? { uri: selectedFile?.uri }
+                        : picture
+                        ? { uri: picture }
+                        : require('~/assets/images/default_profile.png')
+                    }
+                    alt="user thumbnail image"
+                  />
+                </UploadHelper>
+              ) : (
+                <Image
+                  width={150}
+                  height={150}
+                  borderRadius={80}
+                  source={
+                    picture
+                      ? { uri: picture }
+                      : require('~/assets/images/default_profile.png')
+                  }
+                  alt="user thumbnail image"
+                />
+              )}
+            </Box>
+
             <VStack alignItems="center" width={'100%'} gap={10}>
               <Text fontWeight="700" fontSize={'$lg'} color="$grey100">
                 {email}
