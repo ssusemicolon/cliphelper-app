@@ -1,12 +1,9 @@
-import React, { useCallback, useEffect } from 'react';
-import { Platform } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import { useAppDispatch } from '~/store';
-import { fcmActions } from '~/store/slices/fcmSlice';
+import { isAxiosError } from 'axios';
+import { useCallback } from 'react';
+import { sendFcmToken } from '~/features/user/user.api';
 
-export const FcmInitializer = () => {
-  const dispatch = useAppDispatch();
-
+export const useFcm = () => {
   async function requestUserPermission() {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -25,19 +22,22 @@ export const FcmInitializer = () => {
 
     try {
       const fcmToken = await messaging().getToken();
-      dispatch(fcmActions.setFcm({ token: fcmToken, deviceType: Platform.OS }));
+      console.log('fcm token: ', fcmToken);
+      await sendFcmToken(fcmToken);
     } catch (error) {
-      console.error('get fcm error: ', error);
+      if (isAxiosError(error)) {
+        console.error('get fcm error: ', error.response?.data.message);
+      }
     }
-  }, [dispatch]);
+  }, []);
 
-  useEffect(() => {
-    getFcmToken();
+  const sendFcm = useCallback(async () => {
+    await getFcmToken();
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       console.log('[Remote Message] ', JSON.stringify(remoteMessage));
     });
     return unsubscribe;
   }, [getFcmToken]);
 
-  return <React.Fragment />;
+  return sendFcm;
 };
