@@ -1,4 +1,3 @@
-import { FileType } from '~/components/UploadHelper';
 import { authAxios } from '../auth/auth.api';
 
 /** 프로필 조회 */
@@ -24,13 +23,13 @@ export const modifyProfile = async (form: ProfileModifyRequestFormType) => {
   return data.data;
 };
 
-export const modifyUserPicture = async (file: FileType) => {
-  const formData = new FormData();
-  formData.append('picture', file);
-
-  const { data } = await authAxios.patch<ResponseType<{}>>(
-    '/users/picture',
-    formData,
+/** FCM 토큰 전송 */
+export const sendFcmToken = async (fcmToken: string) => {
+  const { data } = await authAxios.post<ResponseType<{}>>(
+    '/users/deviceToken',
+    {
+      deviceToken: fcmToken,
+    },
   );
   return data.data;
 };

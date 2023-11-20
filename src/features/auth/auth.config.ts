@@ -53,7 +53,7 @@ export const useConfigAuthAxios = () => {
             await setToken(newToken.accessToken, newToken.refreshToken);
           }
         } catch (error) {
-          console.log('failed to refresh token: ', error);
+          console.error('failed to refresh token: ', error);
           logoutMutation();
         } finally {
           setTimeout(resetCounter, 300);

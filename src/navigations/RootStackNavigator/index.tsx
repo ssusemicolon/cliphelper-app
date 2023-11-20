@@ -5,11 +5,13 @@ import {
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
+import { MyWebView } from '~/containers/MyWebView';
 import { useConfigAuthAxios } from '~/features/auth/auth.config';
 import { useTokenService } from '~/features/auth/auth.hooks';
 import { useAppDispatch, useAppSelector } from '~/store';
 import { authActions } from '~/store/slices/authSlice';
 import { revealUserId } from '~/utils/revealUserId';
+import { useFcm } from '~/utils/useFcm';
 import {
   ArticleStackNavigator,
   ArticleStackParamList,
@@ -20,7 +22,6 @@ import {
   CollectionStackParamList,
 } from '../CollectionStackNavigator';
 import { MainTabNavigator, MainTabParamList } from '../MainTabNavigator';
-import { MyWebView } from '~/containers/MyWebView';
 
 export type RootStackParamList = {
   Welcome: undefined;
@@ -47,12 +48,17 @@ export const RootStackNavigator = () => {
   const dispatch = useAppDispatch();
   const { getToken } = useTokenService();
   const { axiosConfiguration } = useConfigAuthAxios();
+  const sendFcmToken = useFcm();
 
   useEffect(() => {
     const checkToken = async () => {
       await axiosConfiguration();
       const { accessToken } = await getToken();
-      console.log('check token: ', accessToken);
+
+      if (accessToken) {
+        await sendFcmToken();
+      }
+
       dispatch(
         authActions.setSigned({
           isSigned: !!accessToken,
@@ -61,7 +67,7 @@ export const RootStackNavigator = () => {
       );
     };
     checkToken();
-  }, [axiosConfiguration, dispatch, getToken]);
+  }, [axiosConfiguration, dispatch, getToken, sendFcmToken]);
 
   return (
     <Stack.Navigator
