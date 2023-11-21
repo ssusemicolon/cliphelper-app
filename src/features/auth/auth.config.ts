@@ -26,7 +26,7 @@ const isExpired = (accessToken: string) => {
 
 /** axios */
 export const useConfigAuthAxios = () => {
-  const { getToken, setToken } = useTokenService();
+  const { getToken, setToken, resetToken } = useTokenService();
   const { mutate: logoutMutation } = useLogoutMutation();
   const counter = useRef<number>(1);
 
@@ -34,6 +34,8 @@ export const useConfigAuthAxios = () => {
 
   const checkToken = useCallback(
     async (config: any) => {
+      // await resetToken();
+
       const { accessToken, refreshToken } = await getToken();
 
       if (!accessToken) {
@@ -54,7 +56,7 @@ export const useConfigAuthAxios = () => {
           }
         } catch (error) {
           console.error('failed to refresh token: ', error);
-          console.error(error.response.data);
+          console.error(error?.response?.data);
           logoutMutation();
         } finally {
           setTimeout(resetCounter, 300);

@@ -23,7 +23,7 @@ export const useFcm = () => {
     try {
       const fcmToken = await messaging().getToken();
       console.log('fcm token: ', fcmToken);
-      // await sendFcmToken(fcmToken);
+      await sendFcmToken(fcmToken);
     } catch (error) {
       if (isAxiosError(error)) {
         console.error('get fcm error: ', error.response?.data.message);

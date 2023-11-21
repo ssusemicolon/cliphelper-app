@@ -6,6 +6,7 @@ import { login, logout } from './auth.api';
 
 import { errorHandler } from '~/utils/errorHandler';
 import { setAccessTokenInAxiosHeaders } from './auth.config';
+import { useKakaoAuth } from './useKakaoAuth';
 
 type token = {
   accessToken: string;
@@ -32,11 +33,16 @@ export const useLoginMutation = () => {
 export const useLogoutMutation = () => {
   const dispatch = useAppDispatch();
   const { resetToken, getToken } = useTokenService();
+  const { logout: kakaoLogout } = useKakaoAuth();
+  const { logout: googleLogout } = useKakaoAuth();
 
   return useMutation(
     async () => {
       const { refreshToken } = await getToken();
       await logout(refreshToken);
+      await kakaoLogout();
+      await googleLogout();
+      console.log('logout!');
     },
     {
       onSuccess: async () => {

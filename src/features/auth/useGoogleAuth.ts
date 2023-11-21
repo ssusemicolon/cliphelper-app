@@ -15,5 +15,9 @@ export const useGoogleAuth = () => {
     return userInfo;
   };
 
-  return { login };
+  const logout = async () => {
+    await GoogleSignin.signOut();
+  };
+
+  return { login, logout };
 };

@@ -19,5 +19,21 @@ export const useKakaoAuth = () => {
     }
   };
 
-  return { login };
+  const logout = async () => {
+    console.log('is invoked');
+    try {
+      const result = await KakaoLogin.logout();
+      return result;
+    } catch (error) {
+      if (isAxiosError(error)) {
+        if (error.code === 'E_CANCELLED_OPERATION') {
+          console.log('Login Cancel', error.message);
+        } else {
+          console.log(`Login Fail(code:${error.code})`, error.message);
+        }
+      }
+    }
+  };
+
+  return { login, logout };
 };
