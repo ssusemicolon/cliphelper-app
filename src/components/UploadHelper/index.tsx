@@ -44,7 +44,7 @@ export const UploadHelper = ({
   const pickFile = useCallback(async () => {
     try {
       const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.images],
+        type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
       });
 
       console.log('res: ', res);
