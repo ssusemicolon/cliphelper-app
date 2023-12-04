@@ -11,7 +11,7 @@ import { errorHandler } from '~/utils/errorHandler';
 import { bookmarkKeys } from '../bookmark/bookmark.hooks';
 
 export const collectionKeys = {
-  all: 'collection',
+  all: ['collection'],
   list: () => [...collectionKeys.all, 'list'],
   popular: () => [...collectionKeys.all, 'popular'],
   detail: (id: number) => [...collectionKeys.all, 'detail', { id }],
@@ -37,7 +37,7 @@ export const useCollectionAppendMutation = () => {
   const queryClient = useQueryClient();
   return useMutation(appendCollection, {
     onSuccess: () => {
-      queryClient.invalidateQueries(collectionKeys.list());
+      queryClient.invalidateQueries(collectionKeys.all);
       queryClient.invalidateQueries(bookmarkKeys.list());
     },
     onError: errorHandler,
@@ -49,8 +49,7 @@ export const useCollectionModifyMutation = (collectionId: number) => {
   const queryClient = useQueryClient();
   return useMutation(modifyCollection, {
     onSuccess: () => {
-      queryClient.invalidateQueries(collectionKeys.list());
-      queryClient.invalidateQueries(collectionKeys.detail(collectionId));
+      queryClient.invalidateQueries(collectionKeys.all);
       queryClient.invalidateQueries(bookmarkKeys.list());
       queryClient.invalidateQueries(bookmarkKeys.detail(collectionId));
     },
@@ -63,7 +62,7 @@ export const useCollectionRemoveMutation = () => {
   const queryClient = useQueryClient();
   return useMutation(removeCollection, {
     onSuccess: () => {
-      queryClient.invalidateQueries(collectionKeys.list());
+      queryClient.invalidateQueries(collectionKeys.all);
       queryClient.invalidateQueries(bookmarkKeys.list());
     },
     onError: errorHandler,

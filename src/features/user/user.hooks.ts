@@ -12,7 +12,7 @@ import {
 } from './user.api';
 
 export const userKeys = {
-  all: 'user',
+  all: ['user'],
   profile: () => [...userKeys.all, 'profile'],
   alarm: () => [...userKeys.all, 'alarm'],
 };
@@ -28,7 +28,7 @@ export const useProfileModifyMutation = () => {
   return useMutation(modifyProfile, {
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.profile());
-      queryClient.invalidateQueries(collectionKeys.list());
+      queryClient.invalidateQueries(collectionKeys.all);
     },
     onError: errorHandler,
   });

@@ -13,7 +13,7 @@ import {
 import { bookmarkKeys } from '../bookmark/bookmark.hooks';
 
 export const articleKeys = {
-  all: 'article',
+  all: ['article'],
   list: () => [...articleKeys.all, 'list'],
   detail: (id: number) => [...articleKeys.all, 'detail', { id }],
   collection: (id: number) => [...articleKeys.all, 'collection', { id }],

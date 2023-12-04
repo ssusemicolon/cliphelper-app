@@ -4,7 +4,7 @@ import { errorHandler } from '~/utils/errorHandler';
 import { collectionKeys } from '../collection/collection.hooks';
 
 export const bookmarkKeys = {
-  all: 'bookmark',
+  all: ['bookmark'],
   list: () => [...bookmarkKeys.all, 'list'],
   detail: (id: number) => [...bookmarkKeys.all, 'detail', { id }],
 };
@@ -19,7 +19,7 @@ export const useBookmarkMutation = (collectionId: number) => {
   const queryClient = useQueryClient();
   return useMutation(doBookmark, {
     onSuccess: () => {
-      queryClient.invalidateQueries(collectionKeys.popular());
+      queryClient.invalidateQueries(collectionKeys.all);
       queryClient.invalidateQueries(bookmarkKeys.list());
       queryClient.invalidateQueries(bookmarkKeys.detail(collectionId));
     },
@@ -32,7 +32,7 @@ export const useUndoBookmarkMutation = (collectionId: number) => {
   const queryClient = useQueryClient();
   return useMutation(undoBookmark, {
     onSuccess: () => {
-      queryClient.invalidateQueries(collectionKeys.popular());
+      queryClient.invalidateQueries(collectionKeys.all);
       queryClient.invalidateQueries(bookmarkKeys.list());
       queryClient.invalidateQueries(bookmarkKeys.detail(collectionId));
     },
