@@ -1,6 +1,6 @@
 import { ButtonIcon, VStack } from '@gluestack-ui/themed';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ArticleList from '~/components/ArticleList';
 import ErrorView from '~/components/ErrorView';
 import Header from '~/components/Header';
@@ -9,11 +9,13 @@ import { GrowingLoadingView } from '~/components/Loading/GrowingLoadingView';
 import SafeView from '~/components/SafeView';
 import { CollectionSelector } from '~/containers/CollectionSelector';
 import { useArticleList } from '~/features/article/article.hooks';
+import { useFcm } from '~/utils/useFcm';
 
 export const ArticleListScreen = () => {
   const { data, isLoading, error } = useArticleList();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [selectedArticle, setSelectedArticle] = useState(0);
+  const sendFcmToken = useFcm();
 
   // variables
   const snapPoints = useMemo(() => ['70%'], []);
@@ -23,6 +25,12 @@ export const ArticleListScreen = () => {
     setSelectedArticle(id);
     bottomSheetModalRef.current?.present();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      await sendFcmToken();
+    })();
+  }, [sendFcmToken])
 
   if (isLoading) {
     return (

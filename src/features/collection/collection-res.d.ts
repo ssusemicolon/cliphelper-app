@@ -7,7 +7,8 @@ interface CollectionListItem {
   articleCount: number;
   userId: number;
   user?: UserProfile;
-  public: boolean;
+  isPublic: boolean;
+  isBookmarked: boolean;
 }
 
 interface CollectionDetail extends CollectionListItem {

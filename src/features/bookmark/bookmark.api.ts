@@ -6,3 +6,17 @@ export const fetchBookmarkList = async () => {
 
   return data.data;
 };
+
+export const doBookmark = async (collectionId: number) => {
+  const { data } = await authAxios.post('/bookmarks', {
+    collectionId,
+  });
+  console.log('do bookmark!: ', collectionId);
+  return data.data;
+};
+
+export const undoBookmark = async (collectionId: number) => {
+  const { data } = await authAxios.delete(`/bookmarks/${collectionId}`);
+  console.log('undo bookmark!: ', collectionId);
+  return data.data;
+};

@@ -3,6 +3,7 @@ import { authAxios } from '../auth/auth.api';
 export const fetchArticleList = async () => {
   const { data } =
     await authAxios.get<ResponseType<ArticleListItem[]>>('/articles');
+  console.log(data);
   return data.data;
 };
 

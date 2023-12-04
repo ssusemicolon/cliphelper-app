@@ -11,7 +11,6 @@ import { useTokenService } from '~/features/auth/auth.hooks';
 import { useAppDispatch, useAppSelector } from '~/store';
 import { authActions } from '~/store/slices/authSlice';
 import { revealUserId } from '~/utils/revealUserId';
-import { useFcm } from '~/utils/useFcm';
 import {
   ArticleStackNavigator,
   ArticleStackParamList,
@@ -48,16 +47,11 @@ export const RootStackNavigator = () => {
   const dispatch = useAppDispatch();
   const { getToken } = useTokenService();
   const { axiosConfiguration } = useConfigAuthAxios();
-  const sendFcmToken = useFcm();
 
   useEffect(() => {
     const checkToken = async () => {
       await axiosConfiguration();
       const { accessToken } = await getToken();
-
-      if (accessToken) {
-        await sendFcmToken();
-      }
 
       dispatch(
         authActions.setSigned({
@@ -67,7 +61,7 @@ export const RootStackNavigator = () => {
       );
     };
     checkToken();
-  }, [axiosConfiguration, dispatch, getToken, sendFcmToken]);
+  }, [axiosConfiguration, dispatch, getToken]);
 
   return (
     <Stack.Navigator

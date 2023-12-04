@@ -38,7 +38,7 @@ export const CollectionDetailScreen = ({
     if (!data) {
       return;
     }
-    const { title, description, public: isPublic } = data;
+    const { title, description, isPublic } = data;
     setEditForm({ title, description, isPublic });
   }, [data]);
 

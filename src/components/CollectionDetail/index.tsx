@@ -16,11 +16,13 @@ const CollectionDetail = ({
 }: CollectionDetailPropType) => {
   const { articles, ...others } = data;
 
+  console.log('others: ', others);
+
   return (
     <VStack flex={1}>
       <Box paddingTop={10} paddingHorizontal={10}>
         <CollectionItem
-          collection={others}
+          collection={{ ...others }}
           onChange={onChange}
           editable={editable}
         />

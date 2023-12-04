@@ -16,17 +16,28 @@ const CTAButton = ({
   fgColor = '$grey100',
 }: CTAButtonProps) => {
   return (
-    <Box
-      bgColor={bgColor}
-      borderRadius={6}
-      flex={1}
-      alignItems="center"
-      paddingVertical={8}
-    >
-      <TouchableOpacity onPress={() => onClick?.()}>
-        <Text color={fgColor} fontWeight="800" fontSize={'$lg'}>
-          {children}
-        </Text>
+    <Box flex={1}>
+      <TouchableOpacity activeOpacity={0.8} onPress={() => onClick?.()}>
+        <Box
+          bgColor={bgColor}
+          borderRadius={6}
+          flex={1}
+          alignItems="center"
+          justifyContent="center"
+          paddingVertical={20}
+        >
+          <Text
+            textAlignVertical="center"
+            minHeight={20}
+            color={fgColor}
+            fontWeight="800"
+            fontSize={'$lg'}
+            alignItems="center"
+            justifyContent="center"
+          >
+            {children}
+          </Text>
+        </Box>
       </TouchableOpacity>
     </Box>
   );
