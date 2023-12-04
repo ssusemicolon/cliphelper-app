@@ -8,6 +8,7 @@ import {
   removeCollection,
 } from './collection.api';
 import { errorHandler } from '~/utils/errorHandler';
+import { bookmarkKeys } from '../bookmark/bookmark.hooks';
 
 export const collectionKeys = {
   all: 'collection',
@@ -37,6 +38,7 @@ export const useCollectionAppendMutation = () => {
   return useMutation(appendCollection, {
     onSuccess: () => {
       queryClient.invalidateQueries(collectionKeys.list());
+      queryClient.invalidateQueries(bookmarkKeys.list());
     },
     onError: errorHandler,
   });
@@ -49,6 +51,8 @@ export const useCollectionModifyMutation = (collectionId: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries(collectionKeys.list());
       queryClient.invalidateQueries(collectionKeys.detail(collectionId));
+      queryClient.invalidateQueries(bookmarkKeys.list());
+      queryClient.invalidateQueries(bookmarkKeys.detail(collectionId));
     },
     onError: errorHandler,
   });
@@ -60,6 +64,7 @@ export const useCollectionRemoveMutation = () => {
   return useMutation(removeCollection, {
     onSuccess: () => {
       queryClient.invalidateQueries(collectionKeys.list());
+      queryClient.invalidateQueries(bookmarkKeys.list());
     },
     onError: errorHandler,
   });

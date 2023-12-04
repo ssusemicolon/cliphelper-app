@@ -10,6 +10,7 @@ import {
   modifyArticleCollection,
   removeArticle,
 } from './article.api';
+import { bookmarkKeys } from '../bookmark/bookmark.hooks';
 
 export const articleKeys = {
   all: 'article',
@@ -42,6 +43,8 @@ export const useArticleCollectionMutation = (id: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries(articleKeys.collection(id));
       queryClient.invalidateQueries(collectionKeys.list());
+      queryClient.invalidateQueries(collectionKeys.popular());
+      queryClient.invalidateQueries(bookmarkKeys.list());
     },
     onError: errorHandler,
   });
@@ -53,6 +56,8 @@ export const useArticleAppendMutation = () => {
   return useMutation(appendArticle, {
     onSuccess: () => {
       queryClient.invalidateQueries(articleKeys.list());
+      queryClient.invalidateQueries(collectionKeys.popular());
+      queryClient.invalidateQueries(bookmarkKeys.list());
     },
     onError: errorHandler,
   });
@@ -64,6 +69,8 @@ export const useArticleModifyMutation = (id: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries(articleKeys.list());
       queryClient.invalidateQueries(articleKeys.detail(id));
+      queryClient.invalidateQueries(collectionKeys.popular());
+      queryClient.invalidateQueries(bookmarkKeys.list());
     },
     onError: errorHandler,
   });
@@ -75,6 +82,8 @@ export const useArticleRemoveMutation = () => {
   return useMutation(removeArticle, {
     onSuccess: () => {
       queryClient.invalidateQueries(articleKeys.list());
+      queryClient.invalidateQueries(collectionKeys.popular());
+      queryClient.invalidateQueries(bookmarkKeys.list());
     },
     onError: errorHandler,
   });

@@ -3,7 +3,7 @@ import { doBookmark, fetchBookmarkList, undoBookmark } from './bookmark.api';
 import { errorHandler } from '~/utils/errorHandler';
 import { collectionKeys } from '../collection/collection.hooks';
 
-const bookmarkKeys = {
+export const bookmarkKeys = {
   all: 'bookmark',
   list: () => [...bookmarkKeys.all, 'list'],
   detail: (id: number) => [...bookmarkKeys.all, 'detail', { id }],
